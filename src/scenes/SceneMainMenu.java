@@ -26,7 +26,7 @@ public class SceneMainMenu extends Scene implements GuiMenuListener {
 		this.gp = gamePanel;
 
 		logo = new GuiElement(GamePanel.WIDTH/2 - 128, 0, 256, 256);
-		logo.setImage(ImageLoader.loadImage("res/HUD/Logo.png"));
+		logo.setImage(ImageLoader.loadImage("/HUD/Logo.png"));
 
 		gui.getGui().setX(GamePanel.WIDTH / 2 - 50);
 		gui.getGui().setY(300);

@@ -10,7 +10,7 @@ import render.ImageLoader;
 
 public class EntityWorker extends Entity {
 
-	private BufferedImage img = ImageLoader.loadImage("res/Sprites/McCree/0.png");
+	private BufferedImage img = ImageLoader.loadImage("/Sprites/McCree/0.png");
 
 	private int targetX, targetY;
 

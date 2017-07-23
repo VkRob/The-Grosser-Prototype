@@ -26,9 +26,9 @@ public class Tile {
 	}
 
 	public static BufferedImage tileset[] = { 
-			ImageLoader.loadImage("res/Tiles/grass.png"),
-			ImageLoader.loadImage("res/Tiles/stone.png"), 
-			ImageLoader.loadImage("res/Tiles/wall.png"), 
+			ImageLoader.loadImage("/Tiles/grass.png"),
+			ImageLoader.loadImage("/Tiles/stone.png"), 
+			ImageLoader.loadImage("/Tiles/wall.png"), 
 			};
 
 	public static final int SIZE = 32;
