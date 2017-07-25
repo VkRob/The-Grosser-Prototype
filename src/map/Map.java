@@ -11,7 +11,7 @@ public class Map {
 	private ArrayList<Tile> tiles;
 
 	public Map() {
-		tiles = new ArrayList<Tile>();
+		tiles = new ArrayList<>();
 		this.generateNewWorld();
 	}
 

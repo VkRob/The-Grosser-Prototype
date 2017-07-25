@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import entity.EntityMachine;
 import entity.EntityWorker;
 import map.Map;
 import map.Tile;
@@ -61,6 +62,11 @@ public class Render {
 		g.drawImage(worker.getImg(), this.getRenderX(worker.getX()), this.getRenderY(worker.getY()), worker.getWidth(),
 				worker.getHeight(), null);
 	}
+
+    public void renderMachine(EntityMachine machine) {
+        g.drawImage(machine.getImg(), this.getRenderX(machine.getX()), this.getRenderY(machine.getY()), machine.getWidth(),
+                machine.getHeight(), null);
+    }
 
 	private int getRenderX(int worldX) {
 		return worldX + cameraX;

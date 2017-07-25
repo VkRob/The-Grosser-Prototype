@@ -3,6 +3,7 @@ package scenes;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import entity.EntityMachine;
 import entity.EntityWorker;
 import input.Input;
 import map.Map;
@@ -17,12 +18,14 @@ public class SceneGame extends Scene {
 
 	private Map map;
 	private EntityWorker worker;
+	private EntityMachine machine;
 
 	public SceneGame(SceneManager mgr, GamePanel gamePanel) {
 		super(mgr);
 		this.gp = gamePanel;
 		map = new Map();
-		worker = new EntityWorker(4*Tile.SIZE, 4*Tile.SIZE);
+		machine = new EntityMachine(2*Tile.SIZE, 2*Tile.SIZE, this, 1.5f);
+		worker = new EntityWorker(4*Tile.SIZE, 4*Tile.SIZE, this);
 	}
 
 	@Override
@@ -51,6 +54,10 @@ public class SceneGame extends Scene {
 		render.clearScreen(Color.BLACK, GamePanel.WIDTH, GamePanel.HEIGHT);
 		render.renderMap(map);
 		render.renderWorker(worker);
+		render.renderMachine(machine);
 	}
 
+    public EntityMachine getMachine() {
+        return machine;
+    }
 }
