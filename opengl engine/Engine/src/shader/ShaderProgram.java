@@ -2,6 +2,19 @@ package shader;
 
 import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL11.GL_REPEAT;
+import static org.lwjgl.opengl.GL11.GL_RGB;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_S;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_T;
+import static org.lwjgl.opengl.GL11.glBindTexture;
+import static org.lwjgl.opengl.GL11.glGenTextures;
+import static org.lwjgl.opengl.GL11.glTexImage2D;
+import static org.lwjgl.opengl.GL11.glTexParameteri;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL20.GL_COMPILE_STATUS;
 import static org.lwjgl.opengl.GL20.GL_FRAGMENT_SHADER;
 import static org.lwjgl.opengl.GL20.GL_VERTEX_SHADER;
@@ -11,8 +24,10 @@ import static org.lwjgl.opengl.GL20.glCreateProgram;
 import static org.lwjgl.opengl.GL20.glCreateShader;
 import static org.lwjgl.opengl.GL20.glGetShaderInfoLog;
 import static org.lwjgl.opengl.GL20.glGetShaderi;
+import static org.lwjgl.opengl.GL20.glGetUniformLocation;
 import static org.lwjgl.opengl.GL20.glLinkProgram;
 import static org.lwjgl.opengl.GL20.glShaderSource;
+import static org.lwjgl.opengl.GL20.glUniform1i;
 import static org.lwjgl.opengl.GL20.glUseProgram;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindFragDataLocation;
@@ -30,6 +45,9 @@ public class ShaderProgram {
 
 	private ArrayList<ShaderAttrib> attribs = new ArrayList<ShaderAttrib>();
 	private ArrayList<ShaderUniform> uniforms = new ArrayList<ShaderUniform>();
+	private ArrayList<ShaderTexture> textures = new ArrayList<ShaderTexture>();
+
+	private int currentTextureIndex = 0;
 
 	public ShaderProgram(String fragDataLocation) {
 
@@ -142,6 +160,22 @@ public class ShaderProgram {
 		// Link & begin the shader program
 		glLinkProgram(shaderProgramID);
 		glUseProgram(shaderProgramID);
+	}
+
+	public void addShaderTexture(ShaderTexture texture) {
+		textures.add(texture);
+		texture.setMyID(glGenTextures());
+
+		glActiveTexture(GL_TEXTURE0 + currentTextureIndex);
+		glBindTexture(GL_TEXTURE_2D, texture.getMyID());
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB, GL_FLOAT, texture.getPixels());
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, texture.getTextureMode());
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, texture.getTextureMode());
+		glUniform1i(glGetUniformLocation(shaderProgramID, texture.getName()), currentTextureIndex);
+
+		currentTextureIndex++;
 	}
 
 	public void addShaderUniform(ShaderUniform uniform) {

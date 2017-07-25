@@ -27,7 +27,6 @@ import static org.lwjgl.opengl.GL15.glBufferData;
 import static org.lwjgl.opengl.GL15.glGenBuffers;
 import static org.lwjgl.opengl.GL20.glGetUniformLocation;
 import static org.lwjgl.opengl.GL20.glUniform1i;
-import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
@@ -54,6 +53,7 @@ import main.Main;
 import math.Matrix4f;
 import math.Vector3f;
 import shader.ShaderProgram;
+import shader.ShaderTexture;
 import shader.attrib.ShaderAttribVector2f;
 import shader.uniform.ShaderUniformMatrix4f;
 import shader.uniform.ShaderUniformVector3f;
@@ -72,10 +72,6 @@ public class Render {
 	float camera_speed = 0.1f;
 
 	public static final int sizeOf_GL_FLOAT = 4;
-
-	private static final int TEXTURE_MODE = GL_NEAREST;
-	// NEAREST = Pixelated/8-bit
-	// LINEAR = Blurred
 
 	private ShaderUniformVector3f uniformCameraPosition;
 	private ShaderUniformMatrix4f uniformModelMatrix;
@@ -107,6 +103,18 @@ public class Render {
 				2, 3, 0 // Triangle 2
 		};
 
+		float pixels1[] = {
+
+				0.0f, 0.0f, 1.0f, /* */ 1.0f, 1.0f, 1.0f,
+
+				1.0f, 1.0f, 1.0f, /* */ 0.0f, 0.0f, 1.0f };
+
+		float pixels2[] = {
+
+				1.0f, 0.0f, 0.0f, /* */ 1.0f, 1.0f, 1.0f,
+
+				1.0f, 1.0f, 1.0f, /* */ 1.0f, 0.0f, 0.0f };
+
 		// Activate the vbo
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
@@ -117,29 +125,9 @@ public class Render {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements, GL_STATIC_DRAW);
 
-		////////////////////
-		///////////////////
-		//////////////////
-		/////////////////
-		////////////////
-		///////////////
-		//////////////
-		/////////////
-		////////////
-		///////////
-		//////////
-		/////////
-		////////
-		///////
-		//////
-		/////
-		////
-		///
-		//
-
 		modelMatrix = Matrix4f.rotate(180f, new Vector3f(1.0f, 0.0f, 0.0f));
 		projectionMatrix = Matrix4f.perspective(45.0f, Main.WIDTH / Main.HEIGHT, 1.0f, 10.0f);
-		
+
 		ShaderProgram shader = new ShaderProgram("outColor");
 		int shaderProgram = shader.getShaderProgramID();
 
@@ -150,116 +138,20 @@ public class Render {
 		uniformCameraPosition = new ShaderUniformVector3f("cameraPosition", shaderProgram);
 		uniformModelMatrix = new ShaderUniformMatrix4f("model", shaderProgram);
 		uniformProjectionMatrix = new ShaderUniformMatrix4f("proj", shaderProgram);
-		
+
 		shader.addShaderUniform(uniformCameraPosition);
 		shader.addShaderUniform(uniformModelMatrix);
 		shader.addShaderUniform(uniformProjectionMatrix);
-		
+
 		uniformModelMatrix.sendValueToShader(modelMatrix);
 		uniformProjectionMatrix.sendValueToShader(projectionMatrix);
 
-		// Setup the model matrix uniform
-		//uniModel = glGetUniformLocation(shaderProgram, "model");
+		/* NEAREST = Pixelated, LINEAR = Blurred */
+		ShaderTexture tex1 = new ShaderTexture("tex1", pixels1, GL_NEAREST);
+		ShaderTexture tex2 = new ShaderTexture("tex2", pixels2, GL_NEAREST);
 
-		// Find the "position" variable in the shader program & enable it
-		// int posAttrib = glGetAttribLocation(shaderProgram, "position");
-		// glEnableVertexAttribArray(posAttrib);
-
-		// Format the attrib, stride = 5 because we have 2f vector + 3f color
-		// For whatever reason, stride = 0 when there is only one kind of data
-		// (ie only vector2f positions)
-		/*
-		 * int index, int size, int type, boolean normalized, int stride, long
-		 * buffer_buffer_offset
-		 */
-		// glVertexAttribPointer(posAttrib, 2, GL_FLOAT, false, 7 *
-		// sizeOf_GL_FLOAT, 0);
-
-		// int texAttrib = glGetAttribLocation(shaderProgram, "texcoord");
-		// glEnableVertexAttribArray(texAttrib);
-		//
-		// glVertexAttribPointer(posAttrib, 2, GL_FLOAT, false, 4 *
-		// sizeOf_GL_FLOAT, 0);
-		// glVertexAttribPointer(texAttrib, 2, GL_FLOAT, false, 4 *
-		// sizeOf_GL_FLOAT, 2 * sizeOf_GL_FLOAT);
-
-		// // Set the value of the uniform in the fragment shader
-		// uniColor = glGetUniformLocation(shaderProgram, "triangleColor");
-		// glUniform3f(uniColor, 0.0f, 0.0f, 0.0f);
-
-		// Set up camera uniform
-
-		// // Create and apply the view matrix
-		// view_matrix = Matrix4f.lookAt(new Vector3f(1.0f, 1.0f, 3.0f), new
-		// Vector3f(0.0f, 0.0f, 0.0f),
-		// new Vector3f(0.0f, 0.0f, 1.0f));
-		// uniView = glGetUniformLocation(shaderProgram, "view");
-		// glUniformMatrix4fv(uniView, false, view_matrix.toBuffer());
-
-		float pixels1[] = {
-
-				0.0f, 0.0f, 1.0f,
-
-				1.0f, 1.0f, 1.0f,
-
-				1.0f, 1.0f, 1.0f,
-
-				0.0f, 0.0f, 1.0f };
-
-		float pixels2[] = {
-
-				1.0f, 0.0f, 0.0f,
-
-				1.0f, 1.0f, 1.0f,
-
-				1.0f, 1.0f, 1.0f,
-
-				1.0f, 0.0f, 0.0f };
-
-		int tex[] = { glGenTextures(), glGenTextures() };
-
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, tex[0]);
-
-		// glGenerateMipmap(GL_TEXTURE_2D);
-
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB, GL_FLOAT, pixels1);
-
-		// Specify what happens when a texture coord >1 or <0 happens
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // S = X,
-																		// repeat,
-																		// X = X
-																		// % 1;
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); // T = Y,
-																		// same
-																		// as
-																		// above
-
-		// Performance heavy way of scaling textures --- use mipmaps instead
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, TEXTURE_MODE);// when
-																			// downscaling
-																			// a
-																			// texture
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, TEXTURE_MODE);// when
-																			// upscaling
-																			// a
-																			// texture
-		glUniform1i(glGetUniformLocation(shaderProgram, "tex1"), 0);
-
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, tex[1]);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB, GL_FLOAT, pixels2);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, TEXTURE_MODE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, TEXTURE_MODE);
-		glUniform1i(glGetUniformLocation(shaderProgram, "tex2"), 1);
-
-	
-
-		// view_matrix = Matrix4f.lookAt(camera_pos, new Vector3f(camera_pos.x -
-		// 1f, camera_pos.y - 1f, 0f), new Vector3f(0.0f, 0.0f, 1.0f));
-		// glUniformMatrix4fv(uniView, false, view_matrix.toBuffer());
+		shader.addShaderTexture(tex1);
+		shader.addShaderTexture(tex2);
 
 	}
 

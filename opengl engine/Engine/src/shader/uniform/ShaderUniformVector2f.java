@@ -7,7 +7,7 @@ import math.Vector2f;
 public class ShaderUniformVector2f extends ShaderUniform {
 
 	public ShaderUniformVector2f(String name, int shaderProgramID) {
-		super(name, shaderProgramID);
+		super(name, shaderProgramID, false);
 	}
 
 	public void sendValueToShader(Vector2f vec) {

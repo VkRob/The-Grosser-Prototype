@@ -7,7 +7,7 @@ import math.Matrix4f;
 public class ShaderUniformMatrix4f extends ShaderUniform {
 
 	public ShaderUniformMatrix4f(String name, int shaderProgramID) {
-		super(name, shaderProgramID);
+		super(name, shaderProgramID, false);
 	}
 
 	public void sendValueToShader(Matrix4f mat) {

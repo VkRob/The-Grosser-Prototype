@@ -1,5 +1,6 @@
 package shader.uniform;
 
+import static org.lwjgl.opengl.GL11.glGenTextures;
 import static org.lwjgl.opengl.GL20.glGetUniformLocation;
 
 public abstract class ShaderUniform {
@@ -8,13 +9,18 @@ public abstract class ShaderUniform {
 	private int shaderProgramID; // Pointer to location of shader in memory
 	private String name; // Name of this uniform in the shader
 
-	public ShaderUniform(String name, int shaderProgramID) {
+	public ShaderUniform(String name, int shaderProgramID, boolean isTexture) {
 
 		this.setName(name);
 		this.shaderProgramID = shaderProgramID;
 
-		// find the uniform's location in the shader
-		setMyID(glGetUniformLocation(shaderProgramID, name));
+		if (!isTexture)
+			// find the uniform's location in the shader
+			this.setMyID(glGetUniformLocation(shaderProgramID, name));
+		else {
+			// find the texture's location in the shader
+			this.setMyID(glGenTextures());
+		}
 	}
 
 	public int getShaderProgramID() {
