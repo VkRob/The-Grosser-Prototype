@@ -7,6 +7,7 @@ import java.util.Random;
 import map.Map;
 import map.Tile;
 import render.ImageLoader;
+import scenes.SceneGame;
 
 public class EntityWorker extends Entity {
 
@@ -20,12 +21,18 @@ public class EntityWorker extends Entity {
 
 	private int targetX, targetY;
 
-	public EntityWorker(int x, int y) {
-		super(x, y);
+	boolean isGoingToInteract;
+
+	Entity interactTarget;
+
+	public EntityWorker(int x, int y, SceneGame sceneGame) {
+		super(x, y, sceneGame);
 		super.setWidth(Tile.SIZE);
 		super.setHeight(Tile.SIZE);
 
-		plotNewPosition();
+//		plotNewRandomPosition();
+//        plotNewPosition(sceneGame.getMachine().getX(), sceneGame.getMachine().getY());
+        goInteractWith(sceneGame.getMachine());
 	}
 
 	/**
@@ -34,11 +41,33 @@ public class EntityWorker extends Entity {
 	 * 
 	 * Range of (1,1) to (16,16)
 	 */
-	private void plotNewPosition() {
+	private void plotNewRandomPosition() {
 		Random r = new Random();
 		targetX = (r.nextInt(15) + 1) * Tile.SIZE;
 		targetY = (r.nextInt(15) + 1) * Tile.SIZE;
 	}
+
+    /**
+     * Sets the target position to specified coordinates
+     * May or may not keep this, instead use goInteractWith
+     */
+
+	private void plotNewPosition(int x, int y) {
+	    targetX = x;
+	    targetY = y;
+    }
+
+    /**
+     * Sets the target position to the position of an Interactable Entity
+     */
+
+    private <T extends Entity & EntityInteractable> void goInteractWith(T entity) {
+	    targetX = entity.getX();
+	    targetY = entity.getY();
+
+	    this.interactTarget = entity;
+	    isGoingToInteract = true;
+    }
 
 	/**
 	 * Update and perform Worker actions (mainly just wandering around)
@@ -61,9 +90,21 @@ public class EntityWorker extends Entity {
 		int moveY = (int) (unitY * 5f);
 
 		// If the distance to the target is less than 5, find a new location
-		if (magnitude <= 5f) {
-			plotNewPosition();
-		}
+
+        if (!isGoingToInteract && magnitude <= 5f) {
+            plotNewRandomPosition();
+        }
+        else if (isGoingToInteract && magnitude <= 5f) {
+            synchronized (this) {
+                sceneGame.getMachine().interact(this);
+            }
+            isGoingToInteract = false;
+            plotNewRandomPosition();
+        }
+
+//		if (magnitude <= 5f) {
+//			plotNewRandomPosition();
+//		}
 
 		// Move on X axis, check collision. If collided, move back.
 		setX(getX() + moveX);
@@ -71,7 +112,7 @@ public class EntityWorker extends Entity {
 			if (Tile.isTileSolid(t)) {
 				// Find new location because clearly this location is outside
 				// the factory (and thus impossible to reach)
-				plotNewPosition();
+				plotNewRandomPosition();
 				setX(getX() - moveX);
 			}
 		}
@@ -82,7 +123,7 @@ public class EntityWorker extends Entity {
 			if (Tile.isTileSolid(t)) {
 				// Find new location because clearly this location is outside
 				// the factory (and thus impossible to reach)
-				plotNewPosition();
+				plotNewRandomPosition();
 				setY(getY() - moveY);
 			}
 		}

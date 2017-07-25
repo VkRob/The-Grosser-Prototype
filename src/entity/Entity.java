@@ -1,5 +1,7 @@
 package entity;
 
+import scenes.SceneGame;
+
 import java.awt.image.BufferedImage;
 
 /**
@@ -16,13 +18,17 @@ public abstract class Entity {
 	protected int x, y;
 	protected int width = 16, height = 16;
 
-	public Entity(int x, int y) {
+
+	protected final SceneGame sceneGame;
+
+	public Entity(int x, int y, SceneGame sceneGame) {
 		this.x = x;
 		this.y = y;
+		this.sceneGame = sceneGame;
 	}
 
 	/**
-	 * Sets the Entity's dimensions to inputed image's dimensions
+	 * Sets the Entity's dimensions to inputted image's dimensions
 	 */
 	public void pack(BufferedImage img) {
 		this.width = img.getWidth();

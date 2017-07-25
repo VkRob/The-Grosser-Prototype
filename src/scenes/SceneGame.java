@@ -3,6 +3,7 @@ package scenes;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import entity.EntityMachine;
 import entity.EntityWorker;
 import input.Input;
 import map.Map;
@@ -16,15 +17,19 @@ public class SceneGame extends Scene {
 	private Render render;
 	private Map map;
 	private EntityWorker worker;
+	private EntityMachine machine;
 
 	public SceneGame(SceneManager mgr) {
 		super(mgr);
 
 		map = new Map();
 
-		// Set the worker's position to 4 tiles down, 4 tiles to the right from
+		machine = new EntityMachine(2*Tile.SIZE, 2*Tile.SIZE, this, 1.5f);
+    
+    // Set the worker's position to 4 tiles down, 4 tiles to the right from
 		// the top left corner of the factory (which exists at (0,0))
-		worker = new EntityWorker(4 * Tile.SIZE, 4 * Tile.SIZE);
+		worker = new EntityWorker(4*Tile.SIZE, 4*Tile.SIZE, this);
+
 	}
 
 	/**
@@ -60,6 +65,10 @@ public class SceneGame extends Scene {
 		render.clearScreen(Color.BLACK, GamePanel.WIDTH, GamePanel.HEIGHT);
 		render.renderMap(map);
 		render.renderWorker(worker);
+		render.renderMachine(machine);
 	}
 
+    public EntityMachine getMachine() {
+        return machine;
+    }
 }

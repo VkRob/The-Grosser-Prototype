@@ -28,7 +28,7 @@ public class Map {
 	 * surrounded by grass
 	 */
 	public Map() {
-		tiles = new ArrayList<Tile>();
+		tiles = new ArrayList<>();
 		this.generateNewWorld();
 	}
 

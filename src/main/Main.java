@@ -2,7 +2,7 @@ package main;
 
 import java.awt.Rectangle;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 
 import render.GamePanel;
 
@@ -18,8 +18,8 @@ public class Main {
 	public static void main(String[] args) {
 		JFrame window = new JFrame("Prototype");
 
-		// window.setUndecorated(true);
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//window.setUndecorated(true);
+		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		window.setResizable(false);
 		Rectangle r = new Rectangle(900, 800);
 		// Rectangle r =
