@@ -20,7 +20,7 @@ public class EntityWorker extends Entity {
 
 	private int targetX, targetY;
 
-	boolean isGoingToInteract;
+	boolean isMovingToInteract;
 
 	Entity interactTarget;
 
@@ -65,7 +65,7 @@ public class EntityWorker extends Entity {
 	    targetY = entity.getY();
 
 	    this.interactTarget = entity;
-	    isGoingToInteract = true;
+	    isMovingToInteract = true;
     }
 
 	/**
@@ -90,20 +90,20 @@ public class EntityWorker extends Entity {
 
 		// If the distance to the target is less than 5, find a new location
 
-        if (!isGoingToInteract && magnitude <= 5f) {
-            plotNewRandomPosition();
-        }
-        else if (isGoingToInteract && magnitude <= 5f) {
-            synchronized (this) {
-                sceneGame.getMachine().interact(this);
-            }
-            isGoingToInteract = false;
-            plotNewRandomPosition();
-        }
+        if (magnitude <= 5f) {
 
-//		if (magnitude <= 5f) {
-//			plotNewRandomPosition();
-//		}
+            if (!isMovingToInteract) {
+                plotNewRandomPosition();
+            }
+
+            else {
+                synchronized (this) {
+                    sceneGame.getMachine().interact(this);
+                }
+                isMovingToInteract = false;
+                plotNewRandomPosition();
+            }
+        }
 
 		// Move on X axis, check collision. If collided, move back.
 		setX(getX() + moveX);
