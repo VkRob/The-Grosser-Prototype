@@ -2,7 +2,16 @@ package entity;
 
 import java.awt.image.BufferedImage;
 
+/**
+ * Entity class, mainly a container for important info for each entity like
+ * position and sizing
+ */
+
+// TODO Reformat this class, the constructor is exclusive for x and y (etc), its
+// messy assigning data for an Entity
+
 public abstract class Entity {
+
 	protected int x, y;
 	protected int width = 16, height = 16;
 
@@ -11,6 +20,9 @@ public abstract class Entity {
 		this.y = y;
 	}
 
+	/**
+	 * Sets the Entity's dimensions to inputed image's dimensions
+	 */
 	public void pack(BufferedImage img) {
 		this.width = img.getWidth();
 		this.height = img.getHeight();
