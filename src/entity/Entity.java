@@ -5,7 +5,6 @@ import scenes.SceneGame;
 import java.awt.image.BufferedImage;
 
 /**
- * @author Robert
  * Entity class, mainly a container for important info for each entity like
  * position and sizing
  */

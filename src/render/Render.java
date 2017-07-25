@@ -106,16 +106,18 @@ public class Render {
 				worker.getHeight(), null);
 	}
 
-
-    public void renderMachine(EntityMachine machine) {
-        g.drawImage(machine.getImg(), this.getRenderX(machine.getX()), this.getRenderY(machine.getY()), machine.getWidth(),
-                machine.getHeight(), null);
-    }
-
+	/**
+	 * render a machine
+	 * 
+	 * @param machine
+	 */
+	public void renderMachine(EntityMachine machine) {
+		g.drawImage(machine.getImg(), this.getRenderX(machine.getX()), this.getRenderY(machine.getY()),
+				machine.getWidth(), machine.getHeight(), null);
+	}
 
 	// Converts a position in the world to a position on screen (basically a
 	// camera transform applier thing)
-
 	private int getRenderX(int worldX) {
 		return worldX + cameraX;
 	}
