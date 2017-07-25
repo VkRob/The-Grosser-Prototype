@@ -1,9 +1,9 @@
 package entity;
-/*
- * Created by Ben on 7/25/2017.
+
+/**
+ * @author Ben
  * An interface for Entities that are interactable.
  */
-
 
 public interface EntityInteractable {
 

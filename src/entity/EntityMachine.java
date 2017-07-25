@@ -1,8 +1,4 @@
 package entity;
-/*
- * Created by Ben on 7/25/2017.
- * Base machine to implement EntityInteractable
- */
 
 import map.Tile;
 import render.ImageLoader;
@@ -10,9 +6,18 @@ import scenes.SceneGame;
 
 import java.awt.image.BufferedImage;
 
+/**
+ * @author Ben
+ * Base machine to implement EntityInteractable
+ */
+
 public class EntityMachine extends Entity implements EntityInteractable {
 
     private BufferedImage img = ImageLoader.loadImage("/Sprites/Bot/0.png");
+
+    /**
+     * time for interaction with this Entity to take, in seconds
+     */
 
     public float jobTime;
 
@@ -22,6 +27,11 @@ public class EntityMachine extends Entity implements EntityInteractable {
         super.setHeight(Tile.SIZE);
         this.jobTime = jobTime;
     }
+
+    /**
+     * interact with this entity
+     * @param entity: the entity interacting with this one
+     */
 
     public void interact(Entity entity) {
         synchronized (entity) {

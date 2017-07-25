@@ -106,6 +106,12 @@ public class Render {
 				worker.getHeight(), null);
 	}
 
+    /**
+     * render an EntityMachine
+     *
+     * @param machine
+     */
+
 
     public void renderMachine(EntityMachine machine) {
         g.drawImage(machine.getImg(), this.getRenderX(machine.getX()), this.getRenderY(machine.getY()), machine.getWidth(),
