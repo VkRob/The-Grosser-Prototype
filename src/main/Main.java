@@ -6,12 +6,19 @@ import javax.swing.JFrame;
 
 import render.GamePanel;
 
+/**
+ * Main class, sets up the JFrame and adds the GamePanel object to it... not
+ * much to see here
+ * 
+ * @author Robert
+ *
+ */
 public class Main {
 
 	public static void main(String[] args) {
 		JFrame window = new JFrame("Prototype");
 
-		//window.setUndecorated(true);
+		// window.setUndecorated(true);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setResizable(false);
 		Rectangle r = new Rectangle(900, 800);

@@ -5,6 +5,10 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+/**
+ * Another one of those classes we shouldn't have to touch, this simply loads
+ * images for us so we don;t have to type out the code every time
+ */
 public class ImageLoader {
 
 	private static ImageLoader imgLoader = new ImageLoader();
@@ -13,7 +17,6 @@ public class ImageLoader {
 		try {
 			return ImageIO.read(imgLoader.getClass().getResourceAsStream(path));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}

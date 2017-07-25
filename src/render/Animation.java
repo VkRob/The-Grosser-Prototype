@@ -3,6 +3,13 @@ package render;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+/**
+ * As of current, currently untested, unused, and unfinished code... basically
+ * functions as a way for an entity to be able to have animations
+ */
+
+// TODO Finish writing this class
+
 public class Animation {
 
 	private ArrayList<BufferedImage> frames;

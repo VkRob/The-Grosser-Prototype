@@ -4,6 +4,13 @@ import java.util.ArrayList;
 
 import render.GamePanel;
 
+/**
+ * Shouldn't have to mess around with this class either, it manages which scene
+ * is running (menu, game, or whatever we decide to add later)
+ * 
+ * @author Robert
+ *
+ */
 public class SceneManager {
 
 	private ArrayList<Scene> scenes;
@@ -15,7 +22,7 @@ public class SceneManager {
 	public SceneManager(GamePanel gamePanel) {
 		scenes = new ArrayList<Scene>();
 		scenes.add(scene_main_menu = new SceneMainMenu(this, gamePanel));
-		scenes.add(scene_game = new SceneGame(this, gamePanel));
+		scenes.add(scene_game = new SceneGame(this));
 
 		currentScene = scene_main_menu;
 	}

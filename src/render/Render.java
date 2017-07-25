@@ -3,28 +3,51 @@ package render;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 
 import entity.EntityWorker;
 import map.Map;
 import map.Tile;
 
+/**
+ * Manages rendering for basically everything. Whenever you create a new
+ * renderable object, write its rendering code here. then when you need to
+ * render the object just call the method in this class
+ * 
+ * @author Robert
+ *
+ */
 public class Render {
+
 	private Graphics2D g;
+
+	// Draw Debug Outlines?
 	public boolean debug = true;
 
+	// Camera position
 	private int cameraX = 0;
 	private int cameraY = 0;
 
-	public Render(Graphics2D g, BufferedImage img) {
+	public Render(Graphics2D g) {
 		this.g = g;
 	}
 
-	public void clearScreen(Color c, int width, int height) {
-		g.setColor(c);
+	/**
+	 * Clears the screen
+	 * 
+	 * @param color
+	 * @param width
+	 * @param height
+	 */
+	public void clearScreen(Color color, int width, int height) {
+		g.setColor(color);
 		g.fillRect(0, 0, width, height);
 	}
 
+	/**
+	 * render a gui panel
+	 * 
+	 * @param gui
+	 */
 	public void renderGui(GuiPanel gui) {
 		for (GuiElement e : gui.getElements()) {
 			if (e instanceof GuiText) {
@@ -35,6 +58,11 @@ public class Render {
 		}
 	}
 
+	/**
+	 * render a gui element
+	 * 
+	 * @param gui
+	 */
 	public void renderGui(GuiElement gui) {
 		if (debug) {
 			g.drawRect(gui.getX(), gui.getY(), gui.getWidth(), gui.getHeight());
@@ -43,12 +71,22 @@ public class Render {
 			g.drawImage(gui.getImage(), gui.getX(), gui.getY(), gui.getWidth(), gui.getHeight(), null);
 	}
 
+	/**
+	 * render a gui text element
+	 * 
+	 * @param gui
+	 */
 	public void renderGuiText(GuiText gui) {
 		g.setColor(gui.getColor());
 		g.setFont(new Font(gui.getFont(), Font.PLAIN, gui.getFontSize()));
 		g.drawString(gui.getText(), gui.getX(), gui.getY());
 	}
 
+	/**
+	 * render the tiles in the world from the map object
+	 * 
+	 * @param map
+	 */
 	public void renderMap(Map map) {
 		for (Tile t : map.getTiles()) {
 			g.setColor(Color.WHITE);
@@ -57,15 +95,24 @@ public class Render {
 		}
 	}
 
+	/**
+	 * render a worker
+	 * 
+	 * @param worker
+	 */
 	public void renderWorker(EntityWorker worker) {
 		g.drawImage(worker.getImg(), this.getRenderX(worker.getX()), this.getRenderY(worker.getY()), worker.getWidth(),
 				worker.getHeight(), null);
 	}
 
+	// Converts a position in the world to a position on screen (basically a
+	// camera transform applier thing)
 	private int getRenderX(int worldX) {
 		return worldX + cameraX;
 	}
 
+	// Converts a position in the world to a position on screen (basically a
+	// camera transform applier thing)
 	private int getRenderY(int worldY) {
 		return worldY + cameraY;
 	}

@@ -1,5 +1,11 @@
 package input;
 
+/**
+ * Shouldn't have to touch this code ever... don't worry about it
+ * 
+ * @author Robert
+ */
+
 public class Key {
 
 	private int keycode;
