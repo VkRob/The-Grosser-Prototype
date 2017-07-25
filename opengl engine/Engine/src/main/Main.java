@@ -1,6 +1,6 @@
 package main;
 
-import engine.EngineCore;
+import core.EngineCore;
 
 public class Main {
 

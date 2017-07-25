@@ -1,6 +1,6 @@
 package shader.attrib;
 
-import engine.Render;
+import core.Render;
 
 public class ShaderAttribVector2f extends ShaderAttrib {
 

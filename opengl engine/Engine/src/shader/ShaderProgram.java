@@ -20,6 +20,7 @@ import static org.lwjgl.opengl.GL30.glBindFragDataLocation;
 import java.util.ArrayList;
 
 import shader.attrib.ShaderAttrib;
+import shader.uniform.ShaderUniform;
 
 public class ShaderProgram {
 
@@ -28,6 +29,7 @@ public class ShaderProgram {
 	private int fragmentShaderID;
 
 	private ArrayList<ShaderAttrib> attribs = new ArrayList<ShaderAttrib>();
+	private ArrayList<ShaderUniform> uniforms = new ArrayList<ShaderUniform>();
 
 	public ShaderProgram(String fragDataLocation) {
 
@@ -52,7 +54,9 @@ public class ShaderProgram {
 
 				"uniform mat4 proj;",
 
-				"uniform vec2 cameraPosition;",
+				"uniform vec3 cameraPosition;", // cameraPosition.z denotes the
+												// distance of the camera from
+												// the world
 
 				// Program
 
@@ -60,7 +64,7 @@ public class ShaderProgram {
 
 				"	Texcoord = texcoord;",
 
-				"	gl_Position = proj * model * vec4(position-cameraPosition, 3.0, 1.0);",
+				"	gl_Position = proj * model * vec4(position-cameraPosition.xy, cameraPosition.z, 1.0);",
 
 				"}",
 
@@ -140,6 +144,10 @@ public class ShaderProgram {
 		glUseProgram(shaderProgramID);
 	}
 
+	public void addShaderUniform(ShaderUniform uniform) {
+		uniforms.add(uniform);
+	}
+
 	public void addShaderAttrib(ShaderAttrib attrib) {
 		attribs.add(attrib);
 	}
@@ -147,7 +155,7 @@ public class ShaderProgram {
 	public void pushAttribPointers() {
 
 		int vertexSize = 0;
-		// TODO @Ben, there's probably a method that does this?
+
 		// Find the sum of the sizes on all the attributes
 		for (ShaderAttrib attrib : attribs) {
 			vertexSize += attrib.getSizeOfAttribInMemory();
