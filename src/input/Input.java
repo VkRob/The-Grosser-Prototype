@@ -3,7 +3,26 @@ package input;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+/**
+ * 
+ * 
+ * If you want to access input anywhere in the code, use
+ * <code>Input.get.(Key-name).isPressed()</code>
+ * 
+ * Don't worry about the code in this class, its not important to change.
+ * 
+ * Key-names: <code> UP (w), DOWN (s), LEFT (a), RIGHT (d), SELECT (space), M1,
+ * M2.
+ * 
+ * @author Robert
+ * 
+ */
+
 public class Input {
+
+	/**
+	 * 
+	 */
 	public static Input get;
 
 	public static void init() {
@@ -23,7 +42,7 @@ public class Input {
 	}
 
 	public static void mouseMoved(int x, int y) {
-		//get.mouseMove(x, y);
+		// get.mouseMove(x, y);
 	}
 
 	private ArrayList<Key> keyboard;

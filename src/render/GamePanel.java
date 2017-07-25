@@ -18,6 +18,12 @@ import javax.swing.JPanel;
 import input.Input;
 import scenes.SceneManager;
 
+/**
+ * Eak! Don't mess with this class, it manages Threads, Input and JPanel content
+ * Honestly we shouldn't need to touch this class much so I'm not going to bother commenting it
+ * @author Robert
+ *
+ */
 public class GamePanel extends JPanel implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 
 	// Dimensions

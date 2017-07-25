@@ -6,6 +6,13 @@ import javax.swing.*;
 
 import render.GamePanel;
 
+/**
+ * Main class, sets up the JFrame and adds the GamePanel object to it... not
+ * much to see here
+ * 
+ * @author Robert
+ *
+ */
 public class Main {
 
 	public static void main(String[] args) {

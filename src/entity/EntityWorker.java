@@ -12,6 +12,7 @@ import scenes.SceneGame;
 public class EntityWorker extends Entity {
 
 	/**
+	 * @author Robert
 	 * Most of this code is just placeholder code... thrown together to get the
 	 * entity to work
 	 */

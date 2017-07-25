@@ -2,6 +2,13 @@ package render;
 
 import java.awt.image.BufferedImage;
 
+/**
+ * Basic GUI Texture, literally just a container for position, scaling, and
+ * image data
+ * 
+ * @author Robert
+ *
+ */
 public class GuiElement {
 	private int x;
 	private int y;
@@ -16,8 +23,11 @@ public class GuiElement {
 		this.width = width;
 		this.height = height;
 	}
-	
-	public void pack(){
+
+	/**
+	 * Sets the GuiElement's width and height to its image's width and height
+	 */
+	public void pack() {
 		this.width = image.getWidth();
 		this.height = image.getHeight();
 	}
