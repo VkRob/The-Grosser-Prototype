@@ -1,8 +1,8 @@
-package entity;
+package grosser.prototype.entity;
 
-import map.Tile;
-import render.ImageLoader;
-import scenes.SceneGame;
+import grosser.prototype.map.Tile;
+import grosser.prototype.render.ImageLoader;
+import grosser.prototype.scenes.SceneGame;
 
 import java.awt.image.BufferedImage;
 
@@ -29,8 +29,8 @@ public class EntityMachine extends Entity implements EntityInteractable {
     }
 
     /**
-     * interact with this entity
-     * @param entity: the entity interacting with this one
+     * interact with this grosser.prototype.entity
+     * @param entity: the grosser.prototype.entity interacting with this one
      */
 
     public void interact(Entity entity) {
