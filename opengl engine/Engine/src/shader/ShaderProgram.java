@@ -114,7 +114,8 @@ public class ShaderProgram {
 
 				"	vec4 col2 = texture(tex2, Texcoord);",
 
-				"	outColor = mix(col1, col2, 0.5);",
+				// " outColor = mix(col1, col2, 0.5);",
+				"	outColor = col2;",
 
 				"}",
 
@@ -168,7 +169,7 @@ public class ShaderProgram {
 
 		glActiveTexture(GL_TEXTURE0 + currentTextureIndex);
 		glBindTexture(GL_TEXTURE_2D, texture.getMyID());
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB, GL_FLOAT, texture.getPixels());
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture.getWidth(), texture.getHeight(), 0, GL_RGB, GL_FLOAT, texture.getPixels());
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, texture.getTextureMode());

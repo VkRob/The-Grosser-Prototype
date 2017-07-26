@@ -109,11 +109,13 @@ public class Render {
 
 				1.0f, 1.0f, 1.0f, /* */ 0.0f, 0.0f, 1.0f };
 
-		float pixels2[] = {
-
-				1.0f, 0.0f, 0.0f, /* */ 1.0f, 1.0f, 1.0f,
-
-				1.0f, 1.0f, 1.0f, /* */ 1.0f, 0.0f, 0.0f };
+//		float pixels2[] = {
+//
+//				1.0f, 0.0f, 0.0f, /* */ 1.0f, 1.0f, 1.0f,
+//
+//				1.0f, 1.0f, 1.0f, /* */ 1.0f, 0.0f, 0.0f };
+		
+		float pixels2[] = ImageLoader.getTexturePixels("/test.png");
 
 		// Activate the vbo
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -147,8 +149,8 @@ public class Render {
 		uniformProjectionMatrix.sendValueToShader(projectionMatrix);
 
 		/* NEAREST = Pixelated, LINEAR = Blurred */
-		ShaderTexture tex1 = new ShaderTexture("tex1", pixels1, GL_NEAREST);
-		ShaderTexture tex2 = new ShaderTexture("tex2", pixels2, GL_NEAREST);
+		ShaderTexture tex1 = new ShaderTexture("tex1", pixels1, 64, 64, GL_NEAREST);
+		ShaderTexture tex2 = new ShaderTexture("tex2", pixels2, 64, 64, GL_NEAREST);
 
 		shader.addShaderTexture(tex1);
 		shader.addShaderTexture(tex2);
