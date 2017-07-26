@@ -1,4 +1,4 @@
-package entity;
+package grosser.prototype.entity;
 
 /**
  * @author Ben
