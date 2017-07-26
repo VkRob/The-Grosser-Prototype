@@ -1,34 +1,8 @@
 package core;
 
-import static org.lwjgl.opengl.GL11.GL_FLOAT;
-import static org.lwjgl.opengl.GL11.GL_NEAREST;
-import static org.lwjgl.opengl.GL11.GL_REPEAT;
-import static org.lwjgl.opengl.GL11.GL_RGB;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_S;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_WRAP_T;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
-import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL11.glDrawElements;
-import static org.lwjgl.opengl.GL11.glGenTextures;
-import static org.lwjgl.opengl.GL11.glTexImage2D;
-import static org.lwjgl.opengl.GL11.glTexParameteri;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE1;
-import static org.lwjgl.opengl.GL13.glActiveTexture;
-import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
-import static org.lwjgl.opengl.GL15.glBindBuffer;
-import static org.lwjgl.opengl.GL15.glBufferData;
-import static org.lwjgl.opengl.GL15.glGenBuffers;
-import static org.lwjgl.opengl.GL20.glGetUniformLocation;
-import static org.lwjgl.opengl.GL20.glUniform1i;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 import main.Main;
 
@@ -51,102 +25,30 @@ import main.Main;
 //import static org.lwjgl.opengl.GL45.*;
 
 import math.Matrix4f;
+import math.Vector2f;
 import math.Vector3f;
-import shader.ShaderProgram;
-import shader.ShaderTexture;
-import shader.attrib.ShaderAttribVector2f;
-import shader.uniform.ShaderUniformMatrix4f;
-import shader.uniform.ShaderUniformVector3f;
+import tile.Tile;
 
 public class Render {
 
-	int uniModel;
-	int uniProj;
-	int uniView;
-
-	Matrix4f modelMatrix; // Model Transformation
-	Matrix4f projectionMatrix;
-	Matrix4f view_matrix;
-
-	Vector3f camera_pos = new Vector3f(1.0f, 1.0f, 5.0f);
-	float camera_speed = 0.1f;
-
 	public static final int sizeOf_GL_FLOAT = 4;
 
-	private ShaderUniformVector3f uniformCameraPosition;
-	private ShaderUniformMatrix4f uniformModelMatrix;
-	private ShaderUniformMatrix4f uniformProjectionMatrix;
+	private Matrix4f projectionMatrix;
+	private Vector3f camera_pos = new Vector3f(1.0f, 1.0f, 10.0f);
+	private float camera_speed = 0.1f;
+	private Tile tile;
+	private Tile tile2;
 
 	public Render() {
-
-		// Create a VAO
-		int vao;
-		vao = glGenVertexArrays();
-		glBindVertexArray(vao);
-
-		// Create a Vertex Buffer to carry the vertexes
-		int vbo = glGenBuffers();
-
-		// Create a list of vertices w/ color data
-		// pos (vec2f) + color (vec3f) + texture coordinates (vec2f)
-		float vertices[] = {
-				// Positions (2f), Texture Coordinates (2f)
-				-0.5f, 0.5f, 0.0f, 0.0f, // Top-left
-				0.5f, 0.5f, 1.0f, 0.0f, // Top-right
-				0.5f, -0.5f, 1.0f, 1.0f, // Bottom-right
-				-0.5f, -0.5f, 0.0f, 1.0f // Bottom-left
-		};
-
-		int elements[] = {
-				// Triangles to be rendered
-				0, 1, 2, // Triangle 1
-				2, 3, 0 // Triangle 2
-		};
-		
-		float pixels2[] = ImageLoader.getTexturePixels("/test.png");
-
-		// Activate the vbo
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
-		// Copy the vertex data to the vbo
-		glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
-
-		int ebo = glGenBuffers();
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements, GL_STATIC_DRAW);
-
-		modelMatrix = Matrix4f.rotate(180f, new Vector3f(1.0f, 0.0f, 0.0f));
 		projectionMatrix = Matrix4f.perspective(45.0f, Main.WIDTH / Main.HEIGHT, 1.0f, 10.0f);
-
-		ShaderProgram shader = new ShaderProgram("outColor");
-		int shaderProgram = shader.getShaderProgramID();
-
-		shader.addShaderAttrib(new ShaderAttribVector2f("position", shaderProgram));
-		shader.addShaderAttrib(new ShaderAttribVector2f("texcoord", shaderProgram));
-		shader.pushAttribPointers();
-
-		uniformCameraPosition = new ShaderUniformVector3f("cameraPosition", shaderProgram);
-		uniformModelMatrix = new ShaderUniformMatrix4f("model", shaderProgram);
-		uniformProjectionMatrix = new ShaderUniformMatrix4f("proj", shaderProgram);
-
-		shader.addShaderUniform(uniformCameraPosition);
-		shader.addShaderUniform(uniformModelMatrix);
-		shader.addShaderUniform(uniformProjectionMatrix);
-
-		uniformModelMatrix.sendValueToShader(modelMatrix);
-		uniformProjectionMatrix.sendValueToShader(projectionMatrix);
-
-		/* NEAREST = Pixelated, LINEAR = Blurred */
-		shader.addShaderTexture(new ShaderTexture("texture", pixels2, 16, 16, GL_NEAREST));
-		
+		tile = new Tile(new Vector2f(0f, 0f), 0, this);
+		tile2 = new Tile(new Vector2f(1f, 0f), 0, this);
 	}
 
 	public void render() {
-
-		// Update camera pos
-		uniformCameraPosition.sendValueToShader(camera_pos);
-
-		// Draw
+		tile.render();
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		tile2.render();
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 	}
 
@@ -164,5 +66,13 @@ public class Render {
 
 	public void moveD() {
 		camera_pos.x += camera_speed;
+	}
+
+	public Matrix4f getProjectionMatrix() {
+		return projectionMatrix;
+	}
+
+	public Vector3f getCameraPosition() {
+		return camera_pos;
 	}
 }

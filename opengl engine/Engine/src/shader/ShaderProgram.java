@@ -75,14 +75,14 @@ public class ShaderProgram {
 				"uniform vec3 cameraPosition;", // cameraPosition.z denotes the
 												// distance of the camera from
 												// the world
-
+				"uniform vec2 objectPosition;",
 				// Program
 
 				"void main(){",
 
 				"	Texcoord = texcoord;",
 
-				"	gl_Position = proj * model * vec4(position-cameraPosition.xy, cameraPosition.z, 1.0);",
+				"	gl_Position = proj * model * vec4(objectPosition + position - cameraPosition.xy, cameraPosition.z, 1.0);",
 
 				"}",
 
