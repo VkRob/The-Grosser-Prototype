@@ -1,5 +1,7 @@
 package engine;
 
+import main.Main;
+
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.*;
 import static org.lwjgl.opengl.GL13.*;
@@ -17,8 +19,6 @@ import static org.lwjgl.opengl.GL42.*;
 import static org.lwjgl.opengl.GL43.*;
 import static org.lwjgl.opengl.GL44.*;
 import static org.lwjgl.opengl.GL45.*;
-
-import main.Main;
 
 //import static org.lwjgl.opengl.GL11.*;
 //import static org.lwjgl.opengl.GL12.*;
@@ -40,6 +40,8 @@ import main.Main;
 
 import math.Matrix4f;
 import math.Vector3f;
+import shader.ShaderProgram;
+import shader.attrib.ShaderAttribVector2f;
 
 public class Render {
 
@@ -55,7 +57,7 @@ public class Render {
 	Vector3f camera_pos = new Vector3f(1.0f, 1.0f, 3.0f);
 	float camera_speed = 0.1f;
 
-	private static final int sizeOf_GL_FLOAT = 4;
+	public static final int sizeOf_GL_FLOAT = 4;
 
 	private static final int TEXTURE_MODE = GL_NEAREST;
 	// NEAREST = Pixelated/8-bit
@@ -97,18 +99,36 @@ public class Render {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements, GL_STATIC_DRAW);
 
-		int shaderProgram = new ShaderProgram().getShaderProgramID();
+		////////////////////
+		///////////////////
+		//////////////////
+		/////////////////
+		////////////////
+		///////////////
+		//////////////
+		/////////////
+		////////////
+		///////////
+		//////////
+		/////////
+		////////
+		///////
+		//////
+		/////
+		////
+		///
+		//
 
-		// Assign outColor shader variable to location 0
-		glBindFragDataLocation(shaderProgram, 0, "outColor");
+		ShaderProgram shader = new ShaderProgram("outColor");
+		int shaderProgram = shader.getShaderProgramID();
 
-		// Link & begin the shader program
-		glLinkProgram(shaderProgram);
-		glUseProgram(shaderProgram);
+		shader.addShaderAttrib(new ShaderAttribVector2f("position", shaderProgram));
+		shader.addShaderAttrib(new ShaderAttribVector2f("texcoord", shaderProgram));
+		shader.pushAttribPointers();
 
 		// Find the "position" variable in the shader program & enable it
-		int posAttrib = glGetAttribLocation(shaderProgram, "position");
-		glEnableVertexAttribArray(posAttrib);
+		// int posAttrib = glGetAttribLocation(shaderProgram, "position");
+		// glEnableVertexAttribArray(posAttrib);
 
 		// Format the attrib, stride = 5 because we have 2f vector + 3f color
 		// For whatever reason, stride = 0 when there is only one kind of data
@@ -120,14 +140,13 @@ public class Render {
 		// glVertexAttribPointer(posAttrib, 2, GL_FLOAT, false, 7 *
 		// sizeOf_GL_FLOAT, 0);
 
-		int colAttrib = glGetAttribLocation(shaderProgram, "color");
-		glEnableVertexAttribArray(colAttrib);
-
-		int texAttrib = glGetAttribLocation(shaderProgram, "texcoord");
-		glEnableVertexAttribArray(texAttrib);
-
-		glVertexAttribPointer(posAttrib, 2, GL_FLOAT, false, 4 * sizeOf_GL_FLOAT, 0);
-		glVertexAttribPointer(texAttrib, 2, GL_FLOAT, false, 4 * sizeOf_GL_FLOAT, 2 * sizeOf_GL_FLOAT);
+		// int texAttrib = glGetAttribLocation(shaderProgram, "texcoord");
+		// glEnableVertexAttribArray(texAttrib);
+		//
+		// glVertexAttribPointer(posAttrib, 2, GL_FLOAT, false, 4 *
+		// sizeOf_GL_FLOAT, 0);
+		// glVertexAttribPointer(texAttrib, 2, GL_FLOAT, false, 4 *
+		// sizeOf_GL_FLOAT, 2 * sizeOf_GL_FLOAT);
 
 		// // Set the value of the uniform in the fragment shader
 		// uniColor = glGetUniformLocation(shaderProgram, "triangleColor");

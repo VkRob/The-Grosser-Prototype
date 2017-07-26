@@ -1,8 +1,10 @@
+
 package grosser.prototype.scenes;
 
 import java.util.ArrayList;
 
 import grosser.prototype.render.GamePanel;
+
 
 /**
  * Shouldn't have to mess around with this class either, it manages which scene
@@ -20,9 +22,9 @@ public class SceneManager {
 	public SceneGame scene_game;
 
 	public SceneManager(GamePanel gamePanel) {
-		scenes = new ArrayList<>();
+		scenes = new ArrayList<Scene>();
 		scenes.add(scene_main_menu = new SceneMainMenu(this, gamePanel));
-		scenes.add(scene_game = new SceneGame(this));
+		scenes.add(scene_game = new SceneGame(this, gamePanel));
 
 		currentScene = scene_main_menu;
 	}
