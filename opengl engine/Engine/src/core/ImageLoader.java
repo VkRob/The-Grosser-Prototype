@@ -25,8 +25,8 @@ public class ImageLoader {
 		float[] pixels = new float[img.getWidth() * img.getHeight() * 3];
 
 		int index = 0;
-		for (int x = 0; x < img.getWidth(); x++) {
-			for (int y = 0; y < img.getHeight(); y++) {
+		for (int y = img.getHeight()-1; y >= 0; y--) {
+			for (int x = 0; x < img.getWidth(); x++) {
 
 				int color = img.getRGB(x, y);
 				int red = (color & 0x00ff0000) >> 16;
@@ -42,7 +42,6 @@ public class ImageLoader {
 
 			}
 		}
-		System.out.println(index);
 		return pixels;
 	}
 }

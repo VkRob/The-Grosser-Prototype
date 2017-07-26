@@ -102,18 +102,6 @@ public class Render {
 				0, 1, 2, // Triangle 1
 				2, 3, 0 // Triangle 2
 		};
-
-		float pixels1[] = {
-
-				0.0f, 0.0f, 1.0f, /* */ 1.0f, 1.0f, 1.0f,
-
-				1.0f, 1.0f, 1.0f, /* */ 0.0f, 0.0f, 1.0f };
-
-//		float pixels2[] = {
-//
-//				1.0f, 0.0f, 0.0f, /* */ 1.0f, 1.0f, 1.0f,
-//
-//				1.0f, 1.0f, 1.0f, /* */ 1.0f, 0.0f, 0.0f };
 		
 		float pixels2[] = ImageLoader.getTexturePixels("/test.png");
 
@@ -149,12 +137,8 @@ public class Render {
 		uniformProjectionMatrix.sendValueToShader(projectionMatrix);
 
 		/* NEAREST = Pixelated, LINEAR = Blurred */
-		ShaderTexture tex1 = new ShaderTexture("tex1", pixels1, 64, 64, GL_NEAREST);
-		ShaderTexture tex2 = new ShaderTexture("tex2", pixels2, 64, 64, GL_NEAREST);
-
-		shader.addShaderTexture(tex1);
-		shader.addShaderTexture(tex2);
-
+		shader.addShaderTexture(new ShaderTexture("texture", pixels2, 16, 16, GL_NEAREST));
+		
 	}
 
 	public void render() {
@@ -164,7 +148,6 @@ public class Render {
 
 		// Draw
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
 	}
 
 	public void moveW() {
