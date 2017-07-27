@@ -1,13 +1,11 @@
 package grosser.prototype.entity;
 
-import grosser.prototype.scenes.SceneGame;
-
 import java.awt.image.BufferedImage;
 
 /**
  * @author Robert
- * Entity class, mainly a container for important info for each grosser.prototype.entity like
- * position and sizing
+ * Entity class, mainly a container for important info for each entity, position, size, ID, and also
+ * the EntityManager that is managing it.
  */
 
 public abstract class Entity {
@@ -15,18 +13,27 @@ public abstract class Entity {
 	protected int x, y;
 	protected int width = 16, height = 16;
 
-	final SceneGame sceneGame;
+    // unique ID provided by the EntityManager
+	private final int ID;
 
-	Entity(int x, int y, SceneGame sceneGame) {
+	protected final EntityManager entityManager;
+
+    /**
+     * This constructor uses the default width and height of 16 by 16
+     */
+
+	Entity(int x, int y, int ID, EntityManager entityManager) {
 		this.x = x;
 		this.y = y;
-		this.sceneGame = sceneGame;
+		this.ID = ID;
+		this.entityManager = entityManager;
 	}
 
-	Entity(int x, int y, SceneGame sceneGame, int width, int height) {
+	Entity(int x, int y, int ID, EntityManager entityManager, int width, int height) {
 	    this.x = x;
 	    this.y = y;
-	    this.sceneGame = sceneGame;
+	    this.ID = ID;
+	    this.entityManager = entityManager;
 	    this.height = height;
 	    this.width = width;
     }
@@ -37,6 +44,10 @@ public abstract class Entity {
 	public void pack(BufferedImage img) {
 		this.width = img.getWidth();
 		this.height = img.getHeight();
+	}
+
+	int getID() {
+		return ID;
 	}
 
 	public int getX() {

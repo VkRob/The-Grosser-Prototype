@@ -7,12 +7,11 @@ import java.util.Random;
 import grosser.prototype.map.Map;
 import grosser.prototype.map.Tile;
 import grosser.prototype.render.ImageLoader;
-import grosser.prototype.scenes.SceneGame;
 
 	/**
 	 * @author Robert
 	 * Most of this code is just placeholder code... thrown together to get the
-	 * grosser.prototype.entity to work
+	 * entity to work
 	 */
 
 public class EntityWorker extends Entity {
@@ -23,14 +22,13 @@ public class EntityWorker extends Entity {
 
 	private boolean isMovingToInteract;
 
-	public EntityWorker(int x, int y, SceneGame sceneGame) {
-		super(x, y, sceneGame);
+	EntityWorker(int x, int y, int ID, EntityManager manager) {
+		super(x, y, ID, manager);
 		super.setWidth(Tile.SIZE);
 		super.setHeight(Tile.SIZE);
 
-//		plotNewRandomPosition();
-//        plotNewPosition(sceneGame.getMachine().getX(), sceneGame.getMachine().getY());
-        goInteractWith(sceneGame.getMachine());
+		// assumes there is a first machine to interact with
+        goInteractWith(this.entityManager.getMachines().get(0));
 	}
 
 	/**
@@ -66,7 +64,7 @@ public class EntityWorker extends Entity {
     }
 
 	/**
-	 * Update and perform Worker actions (mainly just wandering around)
+	 * Update and perform Worker actions (wandering around, or moving to and interacting with machines)
 	 */
 	public void update(Map map) {
 
@@ -89,17 +87,17 @@ public class EntityWorker extends Entity {
 
         if (magnitude <= 5f) {
 
-            if (!isMovingToInteract) {
-                plotNewRandomPosition();
-            }
-
-            else {
+            // if the worker is moving towards something it wants to interact with...
+            if (isMovingToInteract) {
                 synchronized (this) {
-                    sceneGame.getMachine().interact(this);
+                    // interact with it! synchronized so that the worker thread will wake up
+                    // when the machine thread is done
+                    entityManager.getMachines().get(0).interact(this);
                 }
                 isMovingToInteract = false;
-                plotNewRandomPosition();
             }
+            // whether it was interacting or not, once it is near its destination it will plot a new position
+            plotNewRandomPosition();
         }
 
 		// Move on X axis, check collision. If collided, move back.

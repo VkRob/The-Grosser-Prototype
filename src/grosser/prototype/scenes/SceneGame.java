@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import grosser.prototype.entity.EntityMachine;
+import grosser.prototype.entity.EntityManager;
+import grosser.prototype.entity.EntityType;
 import grosser.prototype.entity.EntityWorker;
 import grosser.prototype.input.Input;
 import grosser.prototype.map.Map;
@@ -17,15 +19,15 @@ public class SceneGame extends Scene {
 	private GamePanel gp;
 
 	private Map map;
-	private EntityWorker worker;
-	private EntityMachine machine;
+	private final EntityManager entityManager;
 
-	public SceneGame(SceneManager mgr, GamePanel gamePanel) {
+	SceneGame(SceneManager mgr, GamePanel gamePanel) {
 		super(mgr);
 		this.gp = gamePanel;
 		map = new Map();
-		machine = new EntityMachine(2*Tile.SIZE, 2*Tile.SIZE, this, 1.5f);
-		worker = new EntityWorker(4*Tile.SIZE, 4*Tile.SIZE, this);
+		this.entityManager = new EntityManager(this);
+		entityManager.addNewEntity(EntityType.MACHINE, 2*Tile.SIZE, 2*Tile.SIZE);
+		entityManager.addNewEntity(EntityType.WORKER, 4*Tile.SIZE, 4*Tile.SIZE);
 	}
 
 	@Override
@@ -44,7 +46,7 @@ public class SceneGame extends Scene {
 			render.setCameraX(render.getCameraX() - speed);
 		}
 		
-		worker.update(map);
+		entityManager.updateWorkers(map);
 	}
 
 	@Override
@@ -53,11 +55,12 @@ public class SceneGame extends Scene {
 			render = new Render(g);
 		render.clearScreen(Color.BLACK, GamePanel.WIDTH, GamePanel.HEIGHT);
 		render.renderMap(map);
-		render.renderWorker(worker);
-		render.renderMachine(machine);
-	}
+		for (EntityWorker worker : entityManager.getWorkers()) {
+			render.renderWorker(worker);
+		}
+		for (EntityMachine machine : entityManager.getMachines()) {
+			render.renderMachine(machine);
 
-    public EntityMachine getMachine() {
-        return machine;
-    }
+		}
+	}
 }

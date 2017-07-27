@@ -18,18 +18,18 @@ public class SceneManager {
 	private ArrayList<Scene> scenes;
 	private Scene currentScene;
 
-	public SceneMainMenu scene_main_menu;
-	public SceneGame scene_game;
+	private SceneMainMenu scene_main_menu;
+	SceneGame scene_game;
 
 	public SceneManager(GamePanel gamePanel) {
-		scenes = new ArrayList<Scene>();
+		scenes = new ArrayList<>();
 		scenes.add(scene_main_menu = new SceneMainMenu(this, gamePanel));
 		scenes.add(scene_game = new SceneGame(this, gamePanel));
 
 		currentScene = scene_main_menu;
 	}
 
-	public void setScene(Scene scene) {
+	void setScene(Scene scene) {
 		currentScene = scene;
 	}
 

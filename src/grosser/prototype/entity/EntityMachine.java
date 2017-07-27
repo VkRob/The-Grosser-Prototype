@@ -19,18 +19,18 @@ public class EntityMachine extends Entity implements EntityInteractable {
      * time for interaction with this Entity to take, in seconds
      */
 
-    public float jobTime;
+    private final float jobTime;
 
-    public EntityMachine(int x, int y, SceneGame sceneGame, float jobTime) {
-        super(x, y, sceneGame);
+    EntityMachine(int x, int y, int ID, EntityManager entityManager, float jobTime) {
+        super(x, y, ID, entityManager);
         super.setWidth(Tile.SIZE);
         super.setHeight(Tile.SIZE);
         this.jobTime = jobTime;
     }
 
     /**
-     * interact with this grosser.prototype.entity
-     * @param entity: the grosser.prototype.entity interacting with this one
+     * interact with this entity
+     * @param entity: the entity interacting with this one
      */
 
     public void interact(Entity entity) {
