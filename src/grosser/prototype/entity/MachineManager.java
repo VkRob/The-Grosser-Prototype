@@ -21,7 +21,7 @@ public class MachineManager {
     }
 
     void addNewMachine(int x, int y, int ID) {
-        machines.add(new EntityMachine(x, y, ID, this, 1.5f));
+        machines.add(new EntityMachine(x, y, ID, this, 1500));
     }
 
     EntityMachine getMachineByID(int ID) {

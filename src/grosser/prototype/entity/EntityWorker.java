@@ -3,6 +3,9 @@ package grosser.prototype.entity;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import grosser.prototype.map.Map;
 import grosser.prototype.map.Tile;
@@ -20,7 +23,8 @@ public class EntityWorker extends Entity {
 
 	private int targetX, targetY;
 
-	private boolean isMovingToInteract;
+	private EntityInteractable interactTarget;
+	private boolean interacting;
 
 	private final WorkerManager workerManager;
 
@@ -31,7 +35,8 @@ public class EntityWorker extends Entity {
 		this.workerManager = workerManager;
 
 		// assumes there is a first machine to interact with
-        goInteractWith(this.workerManager.getEntityManager().getMachines().get(0));
+        interactTarget = this.workerManager.getEntityManager().getMachines().get(0);
+        goInteractWith(interactTarget);
 	}
 
 	/**
@@ -60,16 +65,18 @@ public class EntityWorker extends Entity {
      * Sets the target position to the position of an Interactable Entity
      */
 
-    private <T extends Entity & EntityInteractable> void goInteractWith(T entity) {
+    private void goInteractWith(EntityInteractable entity) {
 	    targetX = entity.getX();
 	    targetY = entity.getY();
-	    isMovingToInteract = true;
+	    interactTarget = entity;
     }
 
 	/**
 	 * Update and perform Worker actions (wandering around, or moving to and interacting with machines)
 	 */
 	public void update(Map map) {
+
+	    if (interacting) return;
 
 		// Worker calculates the change in X and Y required to get from its
 		// current position to its target location
@@ -91,13 +98,29 @@ public class EntityWorker extends Entity {
         if (magnitude <= 5f) {
 
             // if the worker is moving towards something it wants to interact with...
-            if (isMovingToInteract) {
-                synchronized (this) {
-                    // interact with it! synchronized so that the worker thread will wake up
-                    // when the machine thread is done
-                    workerManager.getEntityManager().getMachines().get(0).interact(this);
-                }
-                isMovingToInteract = false;
+            if (interactTarget != null) {
+
+                interacting = true;
+                ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+                executorService.schedule(() -> {
+                    this.interacting = false;
+                    this.interactTarget.interact(this);
+                }, interactTarget.getJobTime(), TimeUnit.MILLISECONDS);
+//                synchronized (this) {
+//                    // interact with it! synchronized so that the worker thread will wake up
+//                    // when the machine thread is done
+//                    workerManager.getEntityManager().getMachines().get(0).interact(this);
+//                    waiting = true;
+//                    try {
+//                        while (waiting) {
+//                            this.wait();
+//                        }
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+                interactTarget = workerManager.getEntityManager().getMachines().get(1);
+                goInteractWith(interactTarget);
             }
             // whether it was interacting or not, once it is near its destination it will plot a new position
             plotNewRandomPosition();

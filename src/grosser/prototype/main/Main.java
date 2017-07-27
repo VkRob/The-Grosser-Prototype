@@ -1,6 +1,6 @@
 package grosser.prototype.main;
 
-import java.awt.Rectangle;
+import java.awt.*;
 
 import javax.swing.*;
 
@@ -21,7 +21,8 @@ public class Main {
 		//window.setUndecorated(true);
 		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		window.setResizable(false);
-		Rectangle r = new Rectangle(900, 800);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		Rectangle r = new Rectangle(screenSize.width, screenSize.height);
 		// Rectangle r =
 		// GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
 		window.setBounds(r);
