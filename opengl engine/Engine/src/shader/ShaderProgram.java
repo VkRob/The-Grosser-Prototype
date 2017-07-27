@@ -34,6 +34,8 @@ import static org.lwjgl.opengl.GL30.glBindFragDataLocation;
 
 import java.util.ArrayList;
 
+import core.ImageLoader;
+import main.Main;
 import shader.attrib.ShaderAttrib;
 import shader.uniform.ShaderUniform;
 
@@ -49,86 +51,14 @@ public class ShaderProgram {
 
 	private int currentTextureIndex = 0;
 
+	public void use() {
+		glUseProgram(shaderProgramID);
+	}
+
 	public ShaderProgram(String fragDataLocation) {
 
-		// Setup source for the vertex and fragment shaders
-		String vertexShaderSource[] = {
-
-				"#version 150 core",
-
-				// Inputs
-
-				"in vec2 position;",
-
-				"in vec2 texcoord;",
-
-				// Outputs
-
-				"out vec2 Texcoord;",
-
-				// Uniforms
-
-				"uniform mat4 model;",
-
-				"uniform mat4 proj;",
-
-				"uniform vec3 cameraPosition;", // cameraPosition.z denotes the
-												// distance of the camera from
-												// the world
-				"uniform vec2 objectPosition;",
-				// Program
-
-				"void main(){",
-
-				"	Texcoord = texcoord;",
-
-				"	gl_Position = proj * model * vec4(objectPosition + position - cameraPosition.xy, cameraPosition.z, 1.0);",
-
-				"}",
-
-		};
-
-		String fragmentShaderSource[] = {
-
-				"#version 150 core",
-
-				// Inputs
-
-				"in vec2 Texcoord;",
-
-				// Uniforms
-
-				"uniform sampler2D tex1;",
-
-				"uniform sampler2D tex2;",
-
-				// Outputs
-
-				"out vec4 outColor;",
-
-				// Program
-
-				"void main(){",
-
-				"	vec4 col1 = texture(tex1, Texcoord);",
-
-				"	vec4 col2 = texture(tex2, Texcoord);",
-
-				// " outColor = mix(col1, col2, 0.5);",
-				"	outColor = col2;",
-
-				"}",
-
-		};
-
-		String vertexShaderCode = vertexShaderSource[0];
-		for (int i = 1; i < vertexShaderSource.length; ++i) {
-			vertexShaderCode = vertexShaderCode + "\n" + vertexShaderSource[i];
-		}
-		String fragmentShaderCode = fragmentShaderSource[0];
-		for (int i = 1; i < fragmentShaderSource.length; ++i) {
-			fragmentShaderCode = fragmentShaderCode + "\n" + fragmentShaderSource[i];
-		}
+		String vertexShaderCode = ImageLoader.getShader("C:/2D Game Engine/Engine/res/glsl_source/vertexShader.glsl");
+		String fragmentShaderCode = ImageLoader.getShader("C:/2D Game Engine/Engine/res/glsl_source/fragmentShader.glsl");
 
 		// Create shader objects and fill them with the source
 		vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
@@ -144,11 +74,13 @@ public class ShaderProgram {
 		if (status == GL_FALSE) {
 			String error = glGetShaderInfoLog(vertexShaderID);
 			System.out.println("Vertex Shader Failed to compile:\n" + error);
+			System.exit(0);
 		}
 		status = glGetShaderi(fragmentShaderID, GL_COMPILE_STATUS);
 		if (status == GL_FALSE) {
 			String error = glGetShaderInfoLog(fragmentShaderID);
 			System.out.println("Fragment Shader Failed to compile:\n" + error);
+			System.exit(0);
 		}
 
 		// Create a shader program containing the vertex and fragment shader
@@ -167,15 +99,25 @@ public class ShaderProgram {
 		textures.add(texture);
 		texture.setMyID(glGenTextures());
 
+		texture.setTextureBankID(GL_TEXTURE0 + currentTextureIndex);
+
 		glActiveTexture(GL_TEXTURE0 + currentTextureIndex);
 		glBindTexture(GL_TEXTURE_2D, texture.getMyID());
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture.getWidth(), texture.getHeight(), 0, GL_RGB, GL_FLOAT, texture.getPixels());
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture.getWidth(), texture.getHeight(), 0, GL_RGB, GL_FLOAT,
+				texture.getPixels());
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, texture.getTextureMode());
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, texture.getTextureMode());
 		glUniform1i(glGetUniformLocation(shaderProgramID, texture.getName()), currentTextureIndex);
 
+		currentTextureIndex++;
+	}
+
+	public void addFrameBufferTexture(String name, int framebufferColorAttachmentID) {
+		glActiveTexture(GL_TEXTURE0 + currentTextureIndex);
+		glBindTexture(GL_TEXTURE_2D, framebufferColorAttachmentID);
+		glUniform1i(glGetUniformLocation(shaderProgramID, name), currentTextureIndex);
 		currentTextureIndex++;
 	}
 

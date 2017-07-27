@@ -1,6 +1,7 @@
 package shader;
 
 import static org.lwjgl.opengl.GL11.GL_NEAREST;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 
 public class ShaderTexture {
 	
@@ -8,6 +9,7 @@ public class ShaderTexture {
 	private int width, height;
 	private float[] pixels;
 	private int myID;
+	private int textureBankID;
 	private String name;
 
 	public ShaderTexture(String name, float[] pixels, int width, int height, int textureMode) {
@@ -65,6 +67,14 @@ public class ShaderTexture {
 
 	public void setHeight(int height) {
 		this.height = height;
+	}
+
+	public int getTextureBankID() {
+		return textureBankID;
+	}
+
+	public void setTextureBankID(int textureBankID) {
+		this.textureBankID = textureBankID;
 	}
 
 }

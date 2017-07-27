@@ -2,12 +2,28 @@ package core;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import javax.imageio.ImageIO;
+import javax.imageio.stream.FileImageOutputStream;
 
 public class ImageLoader {
 
 	private static ImageLoader imgLoader = new ImageLoader();
+
+	public static String getShader(String path) {
+		String shader = "";
+		try {
+			for (String s : Files.readAllLines((FileSystems.getDefault().getPath(path)))) {
+				shader = shader + "\n" + s;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return shader;
+	}
 
 	private static BufferedImage loadImage(String path) {
 		try {
@@ -25,7 +41,7 @@ public class ImageLoader {
 		float[] pixels = new float[img.getWidth() * img.getHeight() * 3];
 
 		int index = 0;
-		for (int y = img.getHeight()-1; y >= 0; y--) {
+		for (int y = img.getHeight() - 1; y >= 0; y--) {
 			for (int x = 0; x < img.getWidth(); x++) {
 
 				int color = img.getRGB(x, y);

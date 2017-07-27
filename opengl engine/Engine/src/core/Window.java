@@ -134,8 +134,7 @@ public class Window {
 			glfwPollEvents();
 
 			// Clear the screen black
-			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT);
+			
 
 			render.render();
 			if (KeyboardHandler.isKeyDown(GLFW_KEY_W))
@@ -146,6 +145,14 @@ public class Window {
 				render.moveS();
 			if (KeyboardHandler.isKeyDown(GLFW_KEY_D))
 				render.moveD();
+			if(KeyboardHandler.isKeyDown(GLFW_KEY_U))
+				render.moveLight('u');
+			if(KeyboardHandler.isKeyDown(GLFW_KEY_J))
+				render.moveLight('j');
+			if(KeyboardHandler.isKeyDown(GLFW_KEY_H))
+				render.moveLight('h');
+			if(KeyboardHandler.isKeyDown(GLFW_KEY_K))
+				render.moveLight('k');
 
 			glfwSwapBuffers(window); // swap the color buffers
 
