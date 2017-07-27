@@ -16,24 +16,20 @@ public abstract class Entity {
     // unique ID provided by the EntityManager
 	private final int ID;
 
-	protected final EntityManager entityManager;
-
     /**
      * This constructor uses the default width and height of 16 by 16
      */
 
-	Entity(int x, int y, int ID, EntityManager entityManager) {
-		this.x = x;
-		this.y = y;
-		this.ID = ID;
-		this.entityManager = entityManager;
-	}
+    Entity(int x, int y, int ID) {
+        this.x = x;
+        this.y = y;
+        this.ID = ID;
+    }
 
-	Entity(int x, int y, int ID, EntityManager entityManager, int width, int height) {
+	Entity(int x, int y, int ID, int width, int height) {
 	    this.x = x;
 	    this.y = y;
 	    this.ID = ID;
-	    this.entityManager = entityManager;
 	    this.height = height;
 	    this.width = width;
     }

@@ -22,13 +22,16 @@ public class EntityWorker extends Entity {
 
 	private boolean isMovingToInteract;
 
-	EntityWorker(int x, int y, int ID, EntityManager manager) {
-		super(x, y, ID, manager);
+	private final WorkerManager workerManager;
+
+	EntityWorker(int x, int y, int ID, WorkerManager workerManager) {
+		super(x, y, ID);
 		super.setWidth(Tile.SIZE);
 		super.setHeight(Tile.SIZE);
+		this.workerManager = workerManager;
 
 		// assumes there is a first machine to interact with
-        goInteractWith(this.entityManager.getMachines().get(0));
+        goInteractWith(this.workerManager.getEntityManager().getMachines().get(0));
 	}
 
 	/**
@@ -92,7 +95,7 @@ public class EntityWorker extends Entity {
                 synchronized (this) {
                     // interact with it! synchronized so that the worker thread will wake up
                     // when the machine thread is done
-                    entityManager.getMachines().get(0).interact(this);
+                    workerManager.getEntityManager().getMachines().get(0).interact(this);
                 }
                 isMovingToInteract = false;
             }

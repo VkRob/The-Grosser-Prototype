@@ -1,6 +1,5 @@
 package grosser.prototype.entity;
 
-import grosser.prototype.scenes.SceneGame;
 import grosser.prototype.map.Map;
 
 import java.util.ArrayList;
@@ -20,8 +19,8 @@ public class EntityManager {
     I will probably add separate manager classes for each type of Entity
     */
 
-    private ArrayList<EntityWorker> workers;
-    private ArrayList<EntityMachine> machines;
+    private WorkerManager workerManager;
+    private MachineManager machineManager;
 
     /*
     count to keep each entities' ID unique.
@@ -30,13 +29,9 @@ public class EntityManager {
     */
     private int count;
 
-    // I don't think I actually need this anymore
-    private final SceneGame sceneGame;
-
-    public EntityManager(SceneGame sceneGame) {
-        this.sceneGame = sceneGame;
-        workers = new ArrayList<>();
-        machines = new ArrayList<>();
+    public EntityManager() {
+        workerManager = new WorkerManager(this);
+        machineManager = new MachineManager(this);
     }
 
     // adds a new entity to the respective ArrayList based on the number of the EntityType provided
@@ -44,56 +39,52 @@ public class EntityManager {
     public void addNewEntity(EntityType type, int x, int y) {
         switch(type.ordinal()) {
             case 0 :
-                workers.add(new EntityWorker(x, y, count, this));
+                workerManager.addNewWorker(x, y, count);
                 break;
             case 1 :
-                machines.add(new EntityMachine(x, y, count, this, 1.5f));
+                machineManager.addNewMachine(x, y, count);
                 break;
         }
         count++;
     }
 
     public void updateWorkers(Map map) {
-        for (EntityWorker worker : workers) {
+        for (EntityWorker worker : workerManager.getWorkers()) {
             worker.update(map);
         }
     }
 
     EntityWorker getWorkerByID(int ID) {
-        for (EntityWorker worker : workers) {
+        for (EntityWorker worker : workerManager.getWorkers()) {
             if (worker.getID() == ID) return worker;
         }
         return null;
     }
 
     EntityMachine getMachineByID(int ID) {
-        for (EntityMachine machine : machines) {
+        for (EntityMachine machine : machineManager.getMachines()) {
             if (machine.getID() == ID) return machine;
         }
         return null;
     }
 
     Entity getEntityByID(int ID) {
-        for (EntityWorker worker : workers) {
+        for (EntityWorker worker : workerManager.getWorkers()) {
             if (worker.getID() == ID) return worker;
         }
-        for (EntityMachine machine : machines) {
+        for (EntityMachine machine : machineManager.getMachines()) {
             if (machine.getID() == ID) return machine;
         }
         return null;
     }
 
-    SceneGame getSceneGame() {
-        return sceneGame;
-    }
-
     // unmodifiable for hopefully obvious reasons
 
     public List<EntityWorker> getWorkers() {
-        return Collections.unmodifiableList(workers);
+        return workerManager.getWorkers();
     }
 
     public List<EntityMachine> getMachines() {
-        return Collections.unmodifiableList(machines);
+        return machineManager.getMachines();
     }
 }

@@ -25,9 +25,9 @@ public class SceneGame extends Scene {
 		super(mgr);
 		this.gp = gamePanel;
 		map = new Map();
-		this.entityManager = new EntityManager(this);
-		entityManager.addNewEntity(EntityType.MACHINE, 2*Tile.SIZE, 2*Tile.SIZE);
-		entityManager.addNewEntity(EntityType.WORKER, 4*Tile.SIZE, 4*Tile.SIZE);
+		this.entityManager = new EntityManager();
+		entityManager.addNewEntity(EntityType.MACHINE_0, 2*Tile.SIZE, 2*Tile.SIZE);
+		entityManager.addNewEntity(EntityType.WORKER_0, 4*Tile.SIZE, 4*Tile.SIZE);
 	}
 
 	@Override

@@ -18,13 +18,15 @@ public class EntityMachine extends Entity implements EntityInteractable {
     /**
      * time for interaction with this Entity to take, in seconds
      */
+    private float jobTime;
 
-    private final float jobTime;
+    private final MachineManager machineManager;
 
-    EntityMachine(int x, int y, int ID, EntityManager entityManager, float jobTime) {
-        super(x, y, ID, entityManager);
+    EntityMachine(int x, int y, int ID, MachineManager machineManager, float jobTime) {
+        super(x, y, ID);
         super.setWidth(Tile.SIZE);
         super.setHeight(Tile.SIZE);
+        this.machineManager = machineManager;
         this.jobTime = jobTime;
     }
 
@@ -48,5 +50,9 @@ public class EntityMachine extends Entity implements EntityInteractable {
 
     public BufferedImage getImg() {
         return img;
+    }
+
+    void setJobTime(float jobTime) {
+        this.jobTime = jobTime;
     }
 }
