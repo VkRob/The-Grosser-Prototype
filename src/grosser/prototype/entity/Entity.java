@@ -12,6 +12,10 @@ public abstract class Entity {
 
 	protected int x, y;
 	protected int width = 16, height = 16;
+	
+	public void testGithub(){
+		
+	}
 
     // unique ID provided by the EntityManager
 	private final int ID;
