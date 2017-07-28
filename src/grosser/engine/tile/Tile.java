@@ -1,4 +1,4 @@
-package tile;
+package grosser.engine.tile;
 
 import static org.lwjgl.opengl.GL11.GL_NEAREST;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
@@ -18,24 +18,30 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import core.DistanceSorter;
-import core.ImageLoader;
-import core.Render;
-import math.Matrix4f;
-import math.Vector2f;
-import math.Vector3f;
-import shader.ShaderProgram;
-import shader.ShaderTexture;
-import shader.attrib.ShaderAttribVector2f;
-import shader.uniform.ShaderUniformFloat;
-import shader.uniform.ShaderUniformInt;
-import shader.uniform.ShaderUniformMatrix4f;
-import shader.uniform.ShaderUniformVector2f;
-import shader.uniform.ShaderUniformVector2fv;
-import shader.uniform.ShaderUniformVector3f;
-import shader.uniform.ShaderUniformVector3fv;
+import grosser.engine.core.DistanceSorter;
+import grosser.engine.core.ImageLoader;
+import grosser.engine.core.Render;
+import grosser.engine.math.Matrix4f;
+import grosser.engine.math.Vector2f;
+import grosser.engine.math.Vector3f;
+import grosser.engine.shader.ShaderProgram;
+import grosser.engine.shader.ShaderTexture;
+import grosser.engine.shader.attrib.ShaderAttribVector2f;
+import grosser.engine.shader.uniform.ShaderUniformFloat;
+import grosser.engine.shader.uniform.ShaderUniformInt;
+import grosser.engine.shader.uniform.ShaderUniformMatrix4f;
+import grosser.engine.shader.uniform.ShaderUniformVector2f;
+import grosser.engine.shader.uniform.ShaderUniformVector2fv;
+import grosser.engine.shader.uniform.ShaderUniformVector3f;
+import grosser.engine.shader.uniform.ShaderUniformVector3fv;
 
 public class Tile {
+
+	public static final int TILE_GRASS = 0;
+	public static final int TILE_STONE = 1;
+	public static final int TILE_WALL = 2;
+	public static final int SIZE = 1; // Coordinate system is no longer in
+										// integers but openGL units!!!
 
 	public static float[] tileset[] = {
 
@@ -125,9 +131,9 @@ public class Tile {
 		//
 		lightColor.add(new Vector3f(0f, 1f, 0f));
 		lightPosition.add(new Vector3f(0.0f, 0.0f, 1.0f));
-		
-		//lightColor.add(new Vector3f(0f, 1f, 0f));
-		//lightPosition.add(new Vector3f(0.0f, 1.0f, 2.0f));
+
+		// lightColor.add(new Vector3f(0f, 1f, 0f));
+		// lightPosition.add(new Vector3f(0.0f, 1.0f, 2.0f));
 
 		// lightColor.add(new Vector3f(0.0f, 1.0f, 0.0f));
 		// lightPosition.add(new Vector3f(-2.0f, -5.0f, 1f));

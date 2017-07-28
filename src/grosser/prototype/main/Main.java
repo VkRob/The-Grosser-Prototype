@@ -1,33 +1,20 @@
 package grosser.prototype.main;
 
-import java.awt.*;
-
-import javax.swing.*;
-
-import grosser.prototype.render.GamePanel;
+import grosser.engine.core.EngineCore;
 
 /**
- * Main class, sets up the JFrame and adds the GamePanel object to it... not
- * much to see here
+ * Creates the engine manager (EngineCore)
  * 
  * @author Robert
  *
  */
 public class Main {
 
-	public static void main(String[] args) {
-		JFrame window = new JFrame("Prototype");
+	public static final float WIDTH = 800.0f;
+	public static final float HEIGHT = 600.0f;
 
-		//window.setUndecorated(true);
-		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		window.setResizable(false);
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		Rectangle r = new Rectangle(screenSize.width, screenSize.height);
-		// Rectangle r =
-		// GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
-		window.setBounds(r);
-		window.setContentPane(new GamePanel((int) r.getWidth(), (int) r.getHeight()));
-		window.setVisible(true);
+	public static void main(String[] args) {
+		new EngineCore("Engine Test", (int) WIDTH, (int) HEIGHT);
 	}
 
 }

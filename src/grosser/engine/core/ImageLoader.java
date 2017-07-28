@@ -1,4 +1,4 @@
-package core;
+package grosser.engine.core;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;

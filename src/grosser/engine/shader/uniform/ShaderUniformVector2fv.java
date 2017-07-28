@@ -1,4 +1,4 @@
-package shader.uniform;
+package grosser.engine.shader.uniform;
 
 import static org.lwjgl.opengl.GL20.glUniform2fv;
 
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import org.lwjgl.BufferUtils;
 
-import math.Vector2f;
+import grosser.engine.math.Vector2f;
 
 public class ShaderUniformVector2fv extends ShaderUniform {
 

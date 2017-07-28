@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+import grosser.engine.math.Vector2f;
+import grosser.engine.tile.Tile;
+
 /**
  * Map class manages the tiles on the grosser.prototype.map
  * 
@@ -46,7 +49,7 @@ public class Map {
 		// Create an empty SIZE by SIZE square of grass tiles (empty world)
 		for (int x = -SIZE / 2; x < SIZE / 2; x++) {
 			for (int y = -SIZE / 2; y < SIZE / 2; y++) {
-				tiles.put(new TilePosition(x, y), new Tile(Tile.TILE_GRASS));
+				tiles.put(new TilePosition(x, y), new Tile(new Vector2f(x, y), Tile.TILE_GRASS, null));
             }
 		}
 

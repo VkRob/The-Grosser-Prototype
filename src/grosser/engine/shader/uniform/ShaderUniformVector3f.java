@@ -1,8 +1,8 @@
-package shader.uniform;
+package grosser.engine.shader.uniform;
 
 import static org.lwjgl.opengl.GL20.glUniform3f;
 
-import math.Vector3f;
+import grosser.engine.math.Vector3f;
 
 public class ShaderUniformVector3f extends ShaderUniform {
 

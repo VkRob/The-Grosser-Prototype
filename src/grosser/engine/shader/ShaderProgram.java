@@ -1,4 +1,4 @@
-package shader;
+package grosser.engine.shader;
 
 import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
@@ -34,10 +34,9 @@ import static org.lwjgl.opengl.GL30.glBindFragDataLocation;
 
 import java.util.ArrayList;
 
-import core.ImageLoader;
-import main.Main;
-import shader.attrib.ShaderAttrib;
-import shader.uniform.ShaderUniform;
+import grosser.engine.core.ImageLoader;
+import grosser.engine.shader.attrib.ShaderAttrib;
+import grosser.engine.shader.uniform.ShaderUniform;
 
 public class ShaderProgram {
 

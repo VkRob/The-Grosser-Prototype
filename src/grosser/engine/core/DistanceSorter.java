@@ -1,8 +1,8 @@
-package core;
+package grosser.engine.core;
 
 import java.util.Comparator;
 
-import math.Vector2f;
+import grosser.engine.math.Vector2f;
 
 public class DistanceSorter implements Comparator<Vector2f> {
 

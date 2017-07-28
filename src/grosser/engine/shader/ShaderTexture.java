@@ -1,4 +1,4 @@
-package shader;
+package grosser.engine.shader;
 
 import static org.lwjgl.opengl.GL11.GL_NEAREST;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;

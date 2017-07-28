@@ -1,4 +1,4 @@
-package math;
+package grosser.engine.math;
 
 import java.nio.FloatBuffer;
 

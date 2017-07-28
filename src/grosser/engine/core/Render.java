@@ -1,10 +1,9 @@
-package core;
+package grosser.engine.core;
 
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_LINEAR;
 import static org.lwjgl.opengl.GL11.GL_RGB;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE1;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
@@ -29,30 +28,11 @@ import java.util.ArrayList;
 
 import org.lwjgl.BufferUtils;
 
-import main.Main;
-
-//import static org.lwjgl.opengl.GL11.*;
-//import static org.lwjgl.opengl.GL12.*;
-//import static org.lwjgl.opengl.GL13.*;
-//import static org.lwjgl.opengl.GL14.*;
-//import static org.lwjgl.opengl.GL15.*;
-//import static org.lwjgl.opengl.GL20.*;
-//import static org.lwjgl.opengl.GL21.*;
-//import static org.lwjgl.opengl.GL30.*;
-//import static org.lwjgl.opengl.GL31.*;
-//import static org.lwjgl.opengl.GL32.*;
-//import static org.lwjgl.opengl.GL33.*;
-//import static org.lwjgl.opengl.GL40.*;
-//import static org.lwjgl.opengl.GL41.*;
-//import static org.lwjgl.opengl.GL42.*;
-//import static org.lwjgl.opengl.GL43.*;
-//import static org.lwjgl.opengl.GL44.*;
-//import static org.lwjgl.opengl.GL45.*;
-
-import math.Matrix4f;
-import math.Vector2f;
-import math.Vector3f;
-import tile.Tile;
+import grosser.engine.math.Matrix4f;
+import grosser.engine.math.Vector2f;
+import grosser.engine.math.Vector3f;
+import grosser.engine.tile.Tile;
+import grosser.prototype.main.Main;
 
 public class Render {
 
@@ -61,7 +41,7 @@ public class Render {
 	private Matrix4f projectionMatrix;
 	private Vector3f camera_pos = new Vector3f(1.0f, 1.0f, 20.0f);
 	private float camera_speed = 0.1f;
-	private ArrayList<Tile> tiles = new ArrayList<Tile>();
+	
 
 	private int framebuffer;
 	private int textureColorbuffer;
@@ -69,49 +49,39 @@ public class Render {
 	public Render() {
 		projectionMatrix = Matrix4f.perspective(45.0f, Main.WIDTH / Main.HEIGHT, 1.0f, 100.0f);
 
-		int SIZE = 30;
-		for (int i = 0; i < SIZE; i++) {
-			for (int j = 0; j < SIZE; j++) {
-				if (i % 4 == 0 && j % 4 == 0) {
-					tiles.add(new Tile(new Vector2f(i - (SIZE / 2), j - (SIZE / 2)), 2, this));
-				} else
-					tiles.add(new Tile(new Vector2f(i - (SIZE / 2), j - (SIZE / 2)), 0, this));
-			}
-		}
+		
+/*This bit of commented out code is for framebuffers, which will allow us to add post processing effects
+ */
+//		// Create frame buffer
+//		framebuffer = glGenFramebuffers();
+//		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+//
+//		// Attach a color attachment to the frame buffer
+//		textureColorbuffer = glGenTextures();
+//		glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
+//		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (int) Main.WIDTH, (int) Main.HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE,
+//				BufferUtils.createByteBuffer((int) (Main.WIDTH * Main.HEIGHT * 3)));
+//		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+//		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+//		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
+//
+//		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+//			System.out.println("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
+//		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-		// Create frame buffer
-		framebuffer = glGenFramebuffers();
-		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-
-		// Attach a color attachment to the frame buffer
-		textureColorbuffer = glGenTextures();
-		glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (int) Main.WIDTH, (int) Main.HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE,
-				BufferUtils.createByteBuffer((int) (Main.WIDTH * Main.HEIGHT * 3)));
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
-
-		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-			System.out.println("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-		for (Tile t : tiles) {
-			t.getShader().addFrameBufferTexture("u_Texture", textureColorbuffer);
-		}
 
 	}
 
 	public void render() {
-
+		
 		// Sort the tiles by the ones that cast shadows and the ones that do not
-		ArrayList<Tile> shadows = new ArrayList<Tile>();
-
-		for (Tile tile : tiles) {
-			if (tile.getID() == 2) {
-				shadows.add(tile);
-			}
-		}
+//		ArrayList<Tile> shadows = new ArrayList<Tile>();
+//
+//		for (Tile tile : tiles) {
+//			if (tile.getID() == 2) {
+//				shadows.add(tile);
+//			}
+//		}
 		// System.out.println(shadows.size() + "/" + tiles.size());
 		// glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 		//
@@ -124,16 +94,16 @@ public class Render {
 		// }
 		//
 		// glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-		glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-		// System.out.println("#############################");
-		for (Tile tile : tiles) {
-
-			tile.renderNormally(shadows);
-			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-		}
+//
+//		glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
+//		glClear(GL_COLOR_BUFFER_BIT);
+//		// System.out.println("#############################");
+//		for (Tile tile : tiles) {
+//
+//			tile.renderNormally(shadows);
+//			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+//
+//		}
 
 		// glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -165,16 +135,16 @@ public class Render {
 
 	public void moveLight(char key) {
 		float speed = 0.1f;
-		for (Tile t : tiles) {
-			if (key == 'u')
-				t.getLightPosition().get(0).y += speed;
-			if (key == 'j')
-				t.getLightPosition().get(0).y -= speed;
-			if (key == 'h')
-				t.getLightPosition().get(0).x -= speed;
-			if (key == 'k')
-				t.getLightPosition().get(0).x += speed;
-		}
+//		for (Tile t : tiles) {
+//			if (key == 'u')
+//				t.getLightPosition().get(0).y += speed;
+//			if (key == 'j')
+//				t.getLightPosition().get(0).y -= speed;
+//			if (key == 'h')
+//				t.getLightPosition().get(0).x -= speed;
+//			if (key == 'k')
+//				t.getLightPosition().get(0).x += speed;
+//		}
 	}
 
 	public Matrix4f getProjectionMatrix() {

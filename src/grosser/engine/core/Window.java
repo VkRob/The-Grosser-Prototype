@@ -1,4 +1,4 @@
-package core;
+package grosser.engine.core;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
@@ -35,21 +35,25 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
-import input.KeyboardHandler;
+import grosser.engine.input.KeyboardHandler;
 
 public class Window {
 	private long window;
 	private Render render;
+	private EngineCore engine;
+	
 	private GLFWKeyCallback keyCallback;
 
-	public Window(String name, int width, int height) {
-
+	public Window(EngineCore engine, String name, int width, int height) {
+		System.out.println("window created");
+		this.engine = engine;
 		init(name, width, height);
 		// render = new Render();
 		start();
 	}
 
 	public void start() {
+		System.out.println("start");
 		glfwSetKeyCallback(window, keyCallback = new KeyboardHandler());
 		loop();
 
@@ -63,6 +67,7 @@ public class Window {
 	}
 
 	private void init(String name, int width, int height) {
+		
 		// Setup an error callback. The default implementation
 		// will print the error message in System.err.
 		GLFWErrorCallback.createPrint(System.err).set();
@@ -124,7 +129,8 @@ public class Window {
 		// creates the GLCapabilities instance and makes the OpenGL
 		// bindings available for use.
 		GL.createCapabilities();
-		render = new Render();
+		setRender(new Render());
+		engine.init(render);
 
 		// Run the rendering loop until the user has attempted to close
 		// the window or has pressed the ESCAPE key.
@@ -133,29 +139,36 @@ public class Window {
 			// invoked during this call.
 			glfwPollEvents();
 
-			// Clear the screen black
 			
-
-			render.render();
+			engine.update();
+			engine.render();
 			if (KeyboardHandler.isKeyDown(GLFW_KEY_W))
-				render.moveW();
+				getRender().moveW();
 			if (KeyboardHandler.isKeyDown(GLFW_KEY_A))
-				render.moveA();
+				getRender().moveA();
 			if (KeyboardHandler.isKeyDown(GLFW_KEY_S))
-				render.moveS();
+				getRender().moveS();
 			if (KeyboardHandler.isKeyDown(GLFW_KEY_D))
-				render.moveD();
+				getRender().moveD();
 			if(KeyboardHandler.isKeyDown(GLFW_KEY_U))
-				render.moveLight('u');
+				getRender().moveLight('u');
 			if(KeyboardHandler.isKeyDown(GLFW_KEY_J))
-				render.moveLight('j');
+				getRender().moveLight('j');
 			if(KeyboardHandler.isKeyDown(GLFW_KEY_H))
-				render.moveLight('h');
+				getRender().moveLight('h');
 			if(KeyboardHandler.isKeyDown(GLFW_KEY_K))
-				render.moveLight('k');
+				getRender().moveLight('k');
 
 			glfwSwapBuffers(window); // swap the color buffers
 
 		}
+	}
+
+	public Render getRender() {
+		return render;
+	}
+
+	public void setRender(Render render) {
+		this.render = render;
 	}
 }

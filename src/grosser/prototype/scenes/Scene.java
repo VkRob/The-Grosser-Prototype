@@ -1,7 +1,5 @@
 package grosser.prototype.scenes;
 
-import java.awt.Graphics2D;
-
 /**
  * Contains basic container methods for grosser.prototype.scenes, also the SceneManager handle for
  * each Scene
@@ -19,5 +17,6 @@ public abstract class Scene {
 
 	public abstract void update();
 
-	public abstract void render(Graphics2D g);
+	public abstract void render();
+
 }

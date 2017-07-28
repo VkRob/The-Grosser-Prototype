@@ -1,8 +1,8 @@
-package shader.uniform;
+package grosser.engine.shader.uniform;
 
 import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
 
-import math.Matrix4f;
+import grosser.engine.math.Matrix4f;
 
 public class ShaderUniformMatrix4f extends ShaderUniform {
 

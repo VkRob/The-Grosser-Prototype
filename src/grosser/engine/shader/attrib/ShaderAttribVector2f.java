@@ -1,6 +1,6 @@
-package shader.attrib;
+package grosser.engine.shader.attrib;
 
-import core.Render;
+import grosser.engine.core.Render;
 
 public class ShaderAttribVector2f extends ShaderAttrib {
 

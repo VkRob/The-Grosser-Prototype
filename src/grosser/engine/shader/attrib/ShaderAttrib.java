@@ -1,4 +1,4 @@
-package shader.attrib;
+package grosser.engine.shader.attrib;
 
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glGetAttribLocation;

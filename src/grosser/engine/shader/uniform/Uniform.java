@@ -1,4 +1,4 @@
-package shader.uniform;
+package grosser.engine.shader.uniform;
 
 import static org.lwjgl.opengl.GL20.glGetUniformLocation;
 
