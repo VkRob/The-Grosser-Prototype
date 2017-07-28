@@ -1,6 +1,6 @@
 package grosser.prototype.main;
 
-import grosser.engine.core.EngineCore;
+import grosser.engine.core.Window;
 
 /**
  * Creates the engine manager (EngineCore)
@@ -14,7 +14,7 @@ public class Main {
 	public static final float HEIGHT = 600.0f;
 
 	public static void main(String[] args) {
-		new EngineCore("Engine Test", (int) WIDTH, (int) HEIGHT);
+		new Window("Engine Test", (int) WIDTH, (int) HEIGHT);
 	}
 
 }

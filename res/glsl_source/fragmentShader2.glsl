@@ -173,15 +173,7 @@ void main(){
 	int hits = 0;			
 	vec2 outside = vec2(9999,9999);
 	for(int i = 0; i < (numOfShadows*4); i+=1){
-			if(	
-					PointInTriangle(fragPos, ASV[i+0], ASV[i+1], lightPos)==1){
-			//||	PointInTriangle(fragPos, ASV[i+1], ASV[i+2], lightPos)==1
-			//||	PointInTriangle(fragPos, ASV[i+2], ASV[i+3], lightPos)==1
-			
-			//||	PointInTriangle(fragPos, ASV[i+3], ASV[i+0], lightPos)==1){
-				outColor = vec4(1.0, 0.0, 0.0, 1.0);
-				return;
-			}
+
 			
 			//Run a ray from outside the polygon to the frag position. if it collides with the edges an odd number of times, the frag position is inside, vice versa.
 
@@ -215,6 +207,7 @@ void main(){
 	}
 
 	result = result * texture(tex1, Texcoord).xyz;
-	outColor = vec4(result,1.0f);
+	outColor = vec4(texture(tex1, Texcoord).xyz,1.0f);
+
 
 }

@@ -1,4 +1,4 @@
-package grosser.engine.tile;
+package grosser.prototype.map;
 
 import static org.lwjgl.opengl.GL11.GL_NEAREST;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
@@ -40,6 +40,7 @@ public class Tile {
 	public static final int TILE_GRASS = 0;
 	public static final int TILE_STONE = 1;
 	public static final int TILE_WALL = 2;
+	
 	public static final int SIZE = 1; // Coordinate system is no longer in
 										// integers but openGL units!!!
 
@@ -209,7 +210,7 @@ public class Tile {
 		Collections.sort(verts, distanceSorter);
 
 		ArrayList<Vector2f> send = new ArrayList<Vector2f>();
-		for (int i = 0; i < 32; i++) {
+		for (int i = 0; i < verts.size(); i++) {
 			Vector2f g = verts.get(i);
 			send.add(g.add(new Vector2f(-0.5f, 0.5f)));
 			send.add(g.add(new Vector2f(0.5f, 0.5f)));

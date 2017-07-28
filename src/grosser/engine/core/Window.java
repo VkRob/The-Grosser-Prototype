@@ -40,20 +40,16 @@ import grosser.engine.input.KeyboardHandler;
 public class Window {
 	private long window;
 	private Render render;
-	private EngineCore engine;
 	
 	private GLFWKeyCallback keyCallback;
 
-	public Window(EngineCore engine, String name, int width, int height) {
-		System.out.println("window created");
-		this.engine = engine;
+	public Window(String name, int width, int height) {
 		init(name, width, height);
 		// render = new Render();
 		start();
 	}
 
 	public void start() {
-		System.out.println("start");
 		glfwSetKeyCallback(window, keyCallback = new KeyboardHandler());
 		loop();
 
@@ -130,7 +126,6 @@ public class Window {
 		// bindings available for use.
 		GL.createCapabilities();
 		setRender(new Render());
-		engine.init(render);
 
 		// Run the rendering loop until the user has attempted to close
 		// the window or has pressed the ESCAPE key.
@@ -138,10 +133,9 @@ public class Window {
 			// Poll for window events. The key callback above will only be
 			// invoked during this call.
 			glfwPollEvents();
-
 			
-			engine.update();
-			engine.render();
+			this.getRender().render();
+			
 			if (KeyboardHandler.isKeyDown(GLFW_KEY_W))
 				getRender().moveW();
 			if (KeyboardHandler.isKeyDown(GLFW_KEY_A))

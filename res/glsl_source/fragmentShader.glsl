@@ -10,7 +10,7 @@ in vec2 FragGamePos;
 uniform sampler2D tex1;
 uniform sampler2D u_Texture;
 
-const int numOfLights = 2;
+const int numOfLights = 1;
 const int numOfShadows = 32;
 
 uniform vec3 lightColor[numOfLights];
@@ -21,7 +21,7 @@ const float lightSize = 5;
 
 uniform vec2 shadows[numOfShadows*4];
 uniform float recievesShadow;
-
+        
 uniform float time;
  
 uniform vec3 cameraPosition; // cameraPosition.z denotes the distance of the camera from the world
