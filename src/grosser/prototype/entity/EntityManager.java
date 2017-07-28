@@ -87,4 +87,12 @@ public class EntityManager {
     public List<EntityMachine> getMachines() {
         return machineManager.getMachines();
     }
+
+    public List<EntityMachine> getBusyMachines() {
+        return machineManager.getBusyMachines();
+    }
+
+    public List<EntityMachine> getNotBusyMachines() {
+        return machineManager.getNotBusyMachines();
+    }
 }

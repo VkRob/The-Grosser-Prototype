@@ -39,6 +39,7 @@ public class EntityMachine extends EntityInteractable {
      */
 
     public void interact(Entity entity) {
+        isBusy = false;
         // do something here like make new items
     }
 

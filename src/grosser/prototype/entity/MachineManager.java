@@ -1,8 +1,11 @@
 package grosser.prototype.entity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * @author Ben
@@ -33,6 +36,14 @@ public class MachineManager {
 
     EntityManager getEntityManager() {
         return this.entityManager;
+    }
+
+    List<EntityMachine> getBusyMachines() {
+        return Collections.unmodifiableList(machines.stream().filter(entityMachine -> entityMachine.isBusy).collect(Collectors.toList()));
+    }
+
+    List<EntityMachine> getNotBusyMachines() {
+        return Collections.unmodifiableList(machines.stream().filter(entityMachine -> !entityMachine.isBusy).collect(Collectors.toList()));
     }
 
     List<EntityMachine> getMachines() {

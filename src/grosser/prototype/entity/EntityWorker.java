@@ -2,6 +2,7 @@ package grosser.prototype.entity;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -101,6 +102,7 @@ public class EntityWorker extends Entity {
             if (interactTarget != null) {
 
                 interacting = true;
+                interactTarget.isBusy = true;
                 ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
                 executorService.schedule(() -> {
                     this.interacting = false;
@@ -119,11 +121,26 @@ public class EntityWorker extends Entity {
 //                        e.printStackTrace();
 //                    }
 //                }
-                interactTarget = workerManager.getEntityManager().getMachines().get(1);
+//                List<EntityMachine> notBusyMachines = workerManager.getEntityManager().getNotBusyMachines();
+//                if (notBusyMachines.size() == 1) {
+//                    interactTarget = notBusyMachines.get(0);
+//                    goInteractWith(interactTarget);
+//                } else if (notBusyMachines.size() == 0) plotNewRandomPosition();
+//                else {
+//                    interactTarget = notBusyMachines.get(new Random().nextInt(notBusyMachines.size()));
+//                    goInteractWith(interactTarget);
+//                }
+            }
+            List<EntityMachine> notBusyMachines = workerManager.getEntityManager().getNotBusyMachines();
+            if (notBusyMachines.size() == 1) {
+                interactTarget = notBusyMachines.get(0);
                 goInteractWith(interactTarget);
             }
-            // whether it was interacting or not, once it is near its destination it will plot a new position
-            plotNewRandomPosition();
+            else if (notBusyMachines.size() == 0) plotNewRandomPosition();
+            else {
+                interactTarget = notBusyMachines.get(new Random().nextInt(notBusyMachines.size()));
+                goInteractWith(interactTarget);
+            }
         }
 
 		// Move on X axis, check collision. If collided, move back.
