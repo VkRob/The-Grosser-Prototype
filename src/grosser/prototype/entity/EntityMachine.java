@@ -5,24 +5,27 @@ import grosser.prototype.render.ImageLoader;
 import grosser.prototype.scenes.SceneGame;
 
 import java.awt.image.BufferedImage;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Ben
  * Base machine to implement EntityInteractable
  */
 
-public class EntityMachine extends Entity implements EntityInteractable {
+public class EntityMachine extends EntityInteractable {
 
     private BufferedImage img = ImageLoader.loadImage("/Sprites/Bot/0.png");
 
     /**
-     * time for interaction with this Entity to take, in seconds
+     * time for interaction with this Entity to take, in milliseconds
      */
-    private float jobTime;
+    private int jobTime;
 
     private final MachineManager machineManager;
 
-    EntityMachine(int x, int y, int ID, MachineManager machineManager, float jobTime) {
+    EntityMachine(int x, int y, int ID, MachineManager machineManager, int jobTime) {
         super(x, y, ID);
         super.setWidth(Tile.SIZE);
         super.setHeight(Tile.SIZE);
@@ -36,23 +39,13 @@ public class EntityMachine extends Entity implements EntityInteractable {
      */
 
     public void interact(Entity entity) {
-        synchronized (entity) {
-            try {
-                Thread.sleep((long)this.jobTime * 1000);
-            } catch (InterruptedException e) {
-                // serious issues if this happens
-                e.printStackTrace();
-            }
+        isBusy = false;
         // do something here like make new items
-            entity.notify();
-        }
     }
 
     public BufferedImage getImg() {
         return img;
     }
 
-    void setJobTime(float jobTime) {
-        this.jobTime = jobTime;
-    }
+
 }
