@@ -9,12 +9,6 @@ package grosser.prototype.scenes;
  */
 public abstract class Scene {
 
-	protected SceneManager mgr;
-
-	public Scene(SceneManager mgr) {
-		this.mgr = mgr;
-	}
-
 	public abstract void update();
 
 	public abstract void render();

@@ -1,38 +1,9 @@
 package grosser.engine.core;
 
-import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_LINEAR;
-import static org.lwjgl.opengl.GL11.GL_RGB;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
-import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
-import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
-import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
-import static org.lwjgl.opengl.GL11.glBindTexture;
-import static org.lwjgl.opengl.GL11.glClear;
-import static org.lwjgl.opengl.GL11.glClearColor;
-import static org.lwjgl.opengl.GL11.glDrawElements;
-import static org.lwjgl.opengl.GL11.glGenTextures;
-import static org.lwjgl.opengl.GL11.glTexImage2D;
-import static org.lwjgl.opengl.GL11.glTexParameteri;
-import static org.lwjgl.opengl.GL30.GL_COLOR_ATTACHMENT0;
-import static org.lwjgl.opengl.GL30.GL_FRAMEBUFFER;
-import static org.lwjgl.opengl.GL30.GL_FRAMEBUFFER_COMPLETE;
-import static org.lwjgl.opengl.GL30.glBindFramebuffer;
-import static org.lwjgl.opengl.GL30.glCheckFramebufferStatus;
-import static org.lwjgl.opengl.GL30.glFramebufferTexture2D;
-import static org.lwjgl.opengl.GL30.glGenFramebuffers;
-
-import java.util.ArrayList;
-
-import org.lwjgl.BufferUtils;
-
 import grosser.engine.math.Matrix4f;
-import grosser.engine.math.Vector2f;
 import grosser.engine.math.Vector3f;
 import grosser.prototype.main.Main;
-import grosser.prototype.map.Tile;
+import grosser.prototype.scenes.SceneManager;
 
 public class Render {
 
@@ -42,24 +13,18 @@ public class Render {
 	private Vector3f camera_pos = new Vector3f(1.0f, 1.0f, 20.0f);
 	private float camera_speed = 0.1f;
 
-	private ArrayList<Tile> tiles = new ArrayList<Tile>();
+	
+	private SceneManager game;
 
 	private int framebuffer;
 	private int textureColorbuffer;
 
 	public Render() {
 		projectionMatrix = Matrix4f.perspective(45.0f, Main.WIDTH / Main.HEIGHT, 1.0f, 100.0f);
-
-		int SIZE = 30;
-		for (int i = 0; i < SIZE; i++) {
-			for (int j = 0; j < SIZE; j++) {
-				if (i % 4 == 0 && j % 4 == 0) {
-					tiles.add(new Tile(new Vector2f(i - (SIZE / 2), j - (SIZE / 2)), 2, this));
-				} else
-					tiles.add(new Tile(new Vector2f(i - (SIZE / 2), j - (SIZE / 2)), 0, this));
-			}
-		}
-
+		game = new SceneManager(this);
+		
+		
+		
 		/*
 		 * This bit of commented out code is for framebuffers, which will allow
 		 * us to add post processing effects
@@ -88,48 +53,7 @@ public class Render {
 	}
 
 	public void render() {
-
-		// Sort the tiles by the ones that cast shadows and the ones that do not
-		ArrayList<Tile> shadows = new ArrayList<Tile>();
-
-		for (Tile tile : tiles) {
-			if (tile.getID() == 2) {
-				shadows.add(tile);
-			}
-		}
-		// System.out.println(shadows.size() + "/" + tiles.size());
-		// glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-		//
-		// glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		// glClear(GL_COLOR_BUFFER_BIT);
-		// for (Tile tile : tiles) {
-		// // System.out.println(shadows.indexOf(tile));
-		// tile.renderNormally(shadows);
-		// glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		// }
-		//
-		// glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-		glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-		// System.out.println("#############################");
-		for (Tile tile : tiles) {
-
-			tile.renderNormally(shadows);
-			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-		}
-
-		// glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-		// glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-		// glClear(GL_COLOR_BUFFER_BIT);
-
-		// glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-		// glClear(GL_COLOR_BUFFER_BIT);
-
-		// Render the quad
-		// renderQuad();
+		game.getCurrentScene().render();
 	}
 
 	public void moveW() {

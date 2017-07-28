@@ -22,7 +22,7 @@ public class SceneManager {
 
 	public SceneManager(Render render) {
 		scenes = new ArrayList<>();
-		scene_game = new SceneGame(this, render);
+		scene_game = new SceneGame(render);
 		scenes.add(scene_game);
 
 		currentScene = scene_game;

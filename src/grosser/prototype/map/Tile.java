@@ -131,7 +131,7 @@ public class Tile {
 		lightPosition.add(new Vector3f(0.0f, 0.0f, 1.0f));
 		//
 		lightColor.add(new Vector3f(0f, 1f, 0f));
-		lightPosition.add(new Vector3f(0.0f, 0.0f, 1.0f));
+		lightPosition.add(new Vector3f(2.0f, 0.0f, 1.0f));
 
 		// lightColor.add(new Vector3f(0f, 1f, 0f));
 		// lightPosition.add(new Vector3f(0.0f, 1.0f, 2.0f));
