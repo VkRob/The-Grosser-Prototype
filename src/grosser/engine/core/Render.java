@@ -73,17 +73,7 @@ public class Render {
 	}
 
 	public void moveLight(char key) {
-		float speed = 0.1f;
-		// for (Tile t : tiles) {
-		// if (key == 'u')
-		// t.getLightPosition().get(0).y += speed;
-		// if (key == 'j')
-		// t.getLightPosition().get(0).y -= speed;
-		// if (key == 'h')
-		// t.getLightPosition().get(0).x -= speed;
-		// if (key == 'k')
-		// t.getLightPosition().get(0).x += speed;
-		// }
+		game.scene_game.moveLight(key);
 	}
 
 	public Matrix4f getProjectionMatrix() {

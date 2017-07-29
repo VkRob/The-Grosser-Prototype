@@ -1,7 +1,21 @@
 package grosser.engine.core;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
-import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_H;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_J;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_K;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_U;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
+import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
+import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
+import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
+import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
+import static org.lwjgl.glfw.GLFW.glfwGetTime;
 import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
 import static org.lwjgl.glfw.GLFW.glfwDefaultWindowHints;
 import static org.lwjgl.glfw.GLFW.glfwDestroyWindow;
@@ -21,9 +35,6 @@ import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
 import static org.lwjgl.glfw.GLFW.glfwTerminate;
 import static org.lwjgl.glfw.GLFW.glfwWindowHint;
 import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
-import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.glClear;
-import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
@@ -40,7 +51,7 @@ import grosser.engine.input.KeyboardHandler;
 public class Window {
 	private long window;
 	private Render render;
-	
+
 	private GLFWKeyCallback keyCallback;
 
 	public Window(String name, int width, int height) {
@@ -63,7 +74,7 @@ public class Window {
 	}
 
 	private void init(String name, int width, int height) {
-		
+
 		// Setup an error callback. The default implementation
 		// will print the error message in System.err.
 		GLFWErrorCallback.createPrint(System.err).set();
@@ -129,13 +140,25 @@ public class Window {
 
 		// Run the rendering loop until the user has attempted to close
 		// the window or has pressed the ESCAPE key.
+		double lastTime = glfwGetTime();
+		int nbFrames = 0;
+		
 		while (!glfwWindowShouldClose(window)) {
 			// Poll for window events. The key callback above will only be
 			// invoked during this call.
 			glfwPollEvents();
+
 			
+			double currentTime = glfwGetTime();
+			nbFrames++;
+			if (currentTime - lastTime >= 1.0) {
+				System.out.println("fps: " + nbFrames);
+				nbFrames = 0;
+				lastTime += 1.0;
+			}
+
 			this.getRender().render();
-			
+
 			if (KeyboardHandler.isKeyDown(GLFW_KEY_W))
 				getRender().moveW();
 			if (KeyboardHandler.isKeyDown(GLFW_KEY_A))
@@ -144,13 +167,13 @@ public class Window {
 				getRender().moveS();
 			if (KeyboardHandler.isKeyDown(GLFW_KEY_D))
 				getRender().moveD();
-			if(KeyboardHandler.isKeyDown(GLFW_KEY_U))
+			if (KeyboardHandler.isKeyDown(GLFW_KEY_U))
 				getRender().moveLight('u');
-			if(KeyboardHandler.isKeyDown(GLFW_KEY_J))
+			if (KeyboardHandler.isKeyDown(GLFW_KEY_J))
 				getRender().moveLight('j');
-			if(KeyboardHandler.isKeyDown(GLFW_KEY_H))
+			if (KeyboardHandler.isKeyDown(GLFW_KEY_H))
 				getRender().moveLight('h');
-			if(KeyboardHandler.isKeyDown(GLFW_KEY_K))
+			if (KeyboardHandler.isKeyDown(GLFW_KEY_K))
 				getRender().moveLight('k');
 
 			glfwSwapBuffers(window); // swap the color buffers

@@ -184,4 +184,12 @@ public class Vector3f {
 		buffer.flip();
 	}
 
+	/**
+	 * swizzling ez -robert
+	 * @return
+	 */
+	public Vector2f xy() {
+		return new Vector2f(x, y);
+	}
+
 }

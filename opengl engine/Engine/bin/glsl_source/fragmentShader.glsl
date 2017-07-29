@@ -73,27 +73,8 @@ float falloff(float distance){
 
 void main(){
 	
-	float lightHalo = 0f;
-	float sinx = sin(time);
-
-	float s = 0.05;
-	float b = 2;
-	float a = 1.6;
-	float z = -3;
-	float divisor = ((sinx-z)/a)+b;
-	float lightZAnim = divisor - 1;
-	
-	for(int k = 0; k < numOfLights; k++){
-		vec2 lightPos = lightPosition[k].xy;
-	
-		lightHalo += ((divisor*s)/distance(FragPos.xy,lightPos))-1;
-		
-		if(lightHalo<0){
-			lightHalo = 0;
-		}
-	}
 	float calculateLighting[numOfLights];
-
+	vec2 fragPos = FragGamePos;
 
 	if(recievesShadow==1){
 	
@@ -101,7 +82,7 @@ void main(){
 		// Find out if this pixel is in a shadow
 		vec2 lightPos = lightPosition[k].xy;
 		lightPos.y = -lightPos.y;
-		vec2 fragPos = FragGamePos;
+		
 		//
 		calculateLighting[k]=1;
 		for(int i = 0; i < (numOfShadows*4)-1; i+=4){
@@ -144,18 +125,27 @@ void main(){
 	// Calculate diffuse lighting
 	vec3 result = vec3(0,0,0);
 	
-
+	fragPos.y = -fragPos.y;
 	for(int i = 0; i < numOfLights; i++){
 		vec3 norm = normalize(vec3(0.0,0.0,1.0));
-		vec3 lPos = vec3(lightPosition[i].xy, lightPosition[i].z + lightZAnim - cameraPosition.z);
+		vec3 lPos = vec3(lightPosition[i].xy, lightPosition[i].z - cameraPosition.z);
 		vec3 lightDir = normalize(lPos - FragPos);
 		float diff = max(dot(norm, lightDir), 0.0);
-		vec3 diffuse = diff * lightColor[i];
+		
+		float z = 0.3;
+		float haloMixer = 1/pow(distance(fragPos, lightPosition[i].xy), z);
+		float adjuster = 1/pow(1.4, z);
+		float haloFinal = haloMixer-adjuster;
+		if(haloFinal < 0){
+			haloFinal = 0;
+		}
+	
+		vec3 diffuse = mix(diff * lightColor[i], vec3(1.0, 1.0, 1.0), haloFinal);
 		result = result + ((calculateLighting[i]*diffuse) + ambient);
 	}
 
 
-	result = vec3(lightHalo)+ result * texture(tex1, Texcoord).xyz;
+	result = result * texture(tex1, Texcoord).xyz;
 	outColor = vec4(result,1.0f);
 
 }

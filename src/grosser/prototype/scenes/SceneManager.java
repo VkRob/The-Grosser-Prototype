@@ -18,7 +18,7 @@ public class SceneManager {
 	private ArrayList<Scene> scenes;
 	private Scene currentScene;
 	
-	SceneGame scene_game;
+	public SceneGame scene_game;
 
 	public SceneManager(Render render) {
 		scenes = new ArrayList<>();
