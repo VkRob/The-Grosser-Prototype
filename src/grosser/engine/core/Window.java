@@ -5,21 +5,18 @@ import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_H;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_J;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_K;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_U;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
 import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
 import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
-import static org.lwjgl.glfw.GLFW.glfwGetTime;
 import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
 import static org.lwjgl.glfw.GLFW.glfwDefaultWindowHints;
 import static org.lwjgl.glfw.GLFW.glfwDestroyWindow;
 import static org.lwjgl.glfw.GLFW.glfwGetPrimaryMonitor;
+import static org.lwjgl.glfw.GLFW.glfwGetTime;
 import static org.lwjgl.glfw.GLFW.glfwGetVideoMode;
 import static org.lwjgl.glfw.GLFW.glfwGetWindowSize;
 import static org.lwjgl.glfw.GLFW.glfwInit;
@@ -46,8 +43,6 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
-import grosser.engine.input.KeyboardHandler;
-
 public class Window {
 	private long window;
 	private Render render;
@@ -61,6 +56,7 @@ public class Window {
 	}
 
 	public void start() {
+
 		glfwSetKeyCallback(window, keyCallback = new KeyboardHandler());
 		loop();
 
@@ -142,13 +138,12 @@ public class Window {
 		// the window or has pressed the ESCAPE key.
 		double lastTime = glfwGetTime();
 		int nbFrames = 0;
-		
+
 		while (!glfwWindowShouldClose(window)) {
 			// Poll for window events. The key callback above will only be
 			// invoked during this call.
 			glfwPollEvents();
 
-			
 			double currentTime = glfwGetTime();
 			nbFrames++;
 			if (currentTime - lastTime >= 1.0) {
@@ -157,24 +152,19 @@ public class Window {
 				lastTime += 1.0;
 			}
 
-			this.getRender().render();
-
 			if (KeyboardHandler.isKeyDown(GLFW_KEY_W))
-				getRender().moveW();
+				getRender().handleInput('w');
 			if (KeyboardHandler.isKeyDown(GLFW_KEY_A))
-				getRender().moveA();
+				getRender().handleInput('a');
 			if (KeyboardHandler.isKeyDown(GLFW_KEY_S))
-				getRender().moveS();
+				getRender().handleInput('s');
 			if (KeyboardHandler.isKeyDown(GLFW_KEY_D))
-				getRender().moveD();
-			if (KeyboardHandler.isKeyDown(GLFW_KEY_U))
-				getRender().moveLight('u');
-			if (KeyboardHandler.isKeyDown(GLFW_KEY_J))
-				getRender().moveLight('j');
-			if (KeyboardHandler.isKeyDown(GLFW_KEY_H))
-				getRender().moveLight('h');
-			if (KeyboardHandler.isKeyDown(GLFW_KEY_K))
-				getRender().moveLight('k');
+				getRender().handleInput('d');
+			if (KeyboardHandler.isKeyDown(GLFW_KEY_SPACE))
+				getRender().handleInput(' ');
+
+			this.getRender().update();
+			this.getRender().render();
 
 			glfwSwapBuffers(window); // swap the color buffers
 

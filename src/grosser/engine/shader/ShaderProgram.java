@@ -56,8 +56,9 @@ public class ShaderProgram {
 
 	public ShaderProgram(String fragDataLocation) {
 
-		String vertexShaderCode = ImageLoader.getShader("C:/Users/Robert/git/The-Grosser-Prototype/res/glsl_source/vertexShader.glsl");
-		String fragmentShaderCode = ImageLoader.getShader("C:/Users/Robert/git/The-Grosser-Prototype/res/glsl_source/fragmentShader.glsl");
+		String vertexShaderCode = ImageLoader.getShader("/glsl_source/vertexShader.glsl");
+		String fragmentShaderCode = ImageLoader
+				.getShader("/glsl_source/fragmentShader.glsl");
 
 		// Create shader objects and fill them with the source
 		vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
@@ -93,6 +94,7 @@ public class ShaderProgram {
 		glLinkProgram(shaderProgramID);
 		glUseProgram(shaderProgramID);
 	}
+
 
 	public void addShaderTexture(ShaderTexture texture) {
 		textures.add(texture);

@@ -1,47 +1,44 @@
 package grosser.prototype.scenes;
 
 import grosser.engine.core.Render;
-import grosser.prototype.map.Map;
+import grosser.engine.math.Vector2f;
+import grosser.prototype.entity.EntityManager;
+import grosser.prototype.entity.Player;
+import grosser.prototype.entity.TileManager;
+import grosser.prototype.entity.WorldRenderer;
 
 public class SceneGame extends Scene {
 
-	// private ArrayList<Tile> tiles = new ArrayList<Tile>();
-	private Map map;
+	private WorldRenderer worldRenderer;
+
+	private TileManager map;
+	private EntityManager entityManager;
+
+	private Player player;
 
 	public SceneGame(Render render) {
 
-		map = new Map(render);
-		/*
-		 * this.entityManager = new EntityManager();
-		 * entityManager.addNewEntity(EntityType.MACHINE_0, 2 * Tile.SIZE, 2 *
-		 * Tile.SIZE); entityManager.addNewEntity(EntityType.MACHINE_0, 4 *
-		 * Tile.SIZE, 2 * Tile.SIZE);
-		 * entityManager.addNewEntity(EntityType.WORKER_0, 4 * Tile.SIZE, 4 *
-		 * Tile.SIZE);
-		 */
+		map = new TileManager();
+		entityManager = new EntityManager();
+		worldRenderer = new WorldRenderer(render.getCamera(), map, entityManager, render);
+		player = new Player(new Vector2f(2, 0), render.getCamera(), worldRenderer);
+		entityManager.addEntity(player);
+
+		map.generateLevel(worldRenderer, entityManager);
+		player.setMap(map);
+	}
+
+	public void handleInput(char key) {
+		player.handleInput(key);
 	}
 
 	@Override
 	public void update() {
-		// entityManager.updateWorkers(map);
-	}
-
-	public void moveLight(char key) {
-		float speed = 0.1f;
-//		for (Tile t : map.getTiles()) {
-//			if (key == 'u')
-//				t.getLightPosition().get(0).y += speed;
-//			if (key == 'j')
-//				t.getLightPosition().get(0).y -= speed;
-//			if (key == 'h')
-//				t.getLightPosition().get(0).x -= speed;
-//			if (key == 'k')
-//				t.getLightPosition().get(0).x += speed;
-//		}
+		entityManager.update();
 	}
 
 	@Override
 	public void render() {
-		map.render();
+		worldRenderer.render();
 	}
 }

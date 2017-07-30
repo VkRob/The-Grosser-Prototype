@@ -17,13 +17,16 @@ uniform vec3 cameraPosition;// cameraPosition.z denotes the
 												// the world
 uniform vec2 tilePositions[400];
 
+const float div = 20;
+
 // Program
 void main(){
 	vec2 objectPosition = tilePositions[gl_InstanceID];
 	objectPosition.y = -objectPosition.y;
 	
+	//cameraPosition.z
 	Texcoord = texcoord;
-	FragPos = vec3(model * vec4(objectPosition + position, cameraPosition.z, 1.0));
-	FragGamePos = objectPosition + position;
-	gl_Position = proj * model * vec4(objectPosition + position - cameraPosition.xy, cameraPosition.z, 1.0);
+	FragPos = vec3(model * vec4((objectPosition + position), 1, 1.0));
+	FragGamePos = (objectPosition + position);
+	gl_Position = proj * model * vec4((objectPosition + position - cameraPosition.xy)/20, 1, 1.0);
 }

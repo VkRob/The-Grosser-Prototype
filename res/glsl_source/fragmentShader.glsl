@@ -10,17 +10,19 @@ in vec2 FragGamePos;
 uniform sampler2D tex1;
 uniform sampler2D u_Texture;
 
-const int numOfLights = 2;
-const int numOfShadows = 32;
+uniform int numOfLights;
+const int numOfLightsInternal = 16;
+const int numOfShadows = 16;
 
-uniform vec3 lightColor[numOfLights];
-uniform vec3 lightPosition[numOfLights];
-//uniform float lightSize[numOfLights];
+uniform vec3 lightColor[numOfLightsInternal];
+uniform vec3 lightPosition[numOfLightsInternal];
+//uniform float lightSize[numOfLightsInternal];
 
 const float lightSize = 5;
 
 uniform vec2 shadows[numOfShadows*4];
 uniform float recievesShadow;
+uniform vec2 animationFrame;
         
 uniform float time;
  
@@ -67,13 +69,33 @@ float renderShadow(int a1, int a2, vec2 lightPos, vec2 fragPos){
 			return 0;
 }
 
-float falloff(float distance){
-	return (1/pow(distance, 0.4)) - (1/pow(10,0.4));
+float falloff(float d){
+	return (1/pow(d, 0.4)) - (0.001/pow(20,0.4));
+	//return 1;
+}
+
+float lightFalloff(float d, float radius){
+	float att = clamp(1.0 - d*d/(radius*radius), 0.0, 1.0); 
+	att *= att;
+	return att;
 }
 
 void main(){
+
+vec2 finTexCoord = Texcoord;
 	
-	float calculateLighting[numOfLights];
+	if(animationFrame.x != 99){
+		finTexCoord = finTexCoord / 4;
+		finTexCoord = finTexCoord + (animationFrame/4);
+	}
+	//see through stuff
+	vec3 sampleTexture = texture(tex1, finTexCoord).xyz;
+	if(sampleTexture.x > 0.9 && sampleTexture.y < 0.1 && sampleTexture.z > 0.9){
+
+		discard;
+	}
+	
+	float calculateLighting[numOfLightsInternal];
 	vec2 fragPos = FragGamePos;
 
 	if(recievesShadow==1){
@@ -95,29 +117,37 @@ void main(){
 			float x = distance(lightPos, fragPos);
 			if(	renderShadow(tl, tr, lightPos, fragPos)==1){
 				calculateLighting[k] -= falloff(x);
+				//calculateLighting[k] = 0;
 			}
 			if(	renderShadow(tr, br, lightPos, fragPos)==1){
 				calculateLighting[k] -= falloff(x);
+				//calculateLighting[k] = 0;
 			}
 			if(	renderShadow(br, bl, lightPos, fragPos)==1){
 				calculateLighting[k] -= falloff(x);
+				//calculateLighting[k] = 0;
 			}
 			if(	renderShadow(bl, tl, lightPos, fragPos)==1){
 				calculateLighting[k] -= falloff(x);
+				//calculateLighting[k] = 0;
 			}
-			if(calculateLighting[k] < 0.9){
-				calculateLighting[k] = 0.9;
+			if(calculateLighting[k] < 0.03){
+				calculateLighting[k] = 0.03;
 			}
 			if(calculateLighting[k] > 1){
 				calculateLighting[k] = 1;
 			}
 		}
 		}
+	}else{
+		for(int k = 0; k < numOfLights; k++){
+			calculateLighting[k] = 0.04;
+		}
 	}
 	
 	// Calculate ambient lighting
-	float ambientStrength = 0.03f;
-
+	float ambientStrength = 0.07f;
+	
 	// The Ambient color is always the same color as the first light
 	// in the scene
 	vec3 ambient = ambientStrength * lightColor[0];
@@ -127,25 +157,31 @@ void main(){
 	
 	fragPos.y = -fragPos.y;
 	for(int i = 0; i < numOfLights; i++){
-		vec3 norm = normalize(vec3(0.0,0.0,1.0));
-		vec3 lPos = vec3(lightPosition[i].xy, lightPosition[i].z - cameraPosition.z);
-		vec3 lightDir = normalize(lPos - FragPos);
-		float diff = max(dot(norm, lightDir), 0.0);
-		
+		//vec3 norm = normalize(vec3(0.0,0.0,1.0));
+		//vec3 lPos = vec3(lightPosition[i].xy, lightPosition[i].z - 20);
+		//vec3 lightDir = normalize(lPos - FragPos);
+		//float diff = max(dot(norm, lightDir), 0.0);
+		float diff = lightFalloff(distance(lightPosition[i].xy, FragPos.xy), lightPosition[i].z);
+		if(diff >= 0.005f && diff <= 0.01 && lightColor[i]!=vec3(0,1,0) && lightColor[i]!=vec3(1,1,1)){
+			outColor = vec4(lightColor[i],1.0);
+			return;
+		}
 		float z = 0.3;
-		float haloMixer = 1/pow(distance(fragPos, lightPosition[i].xy), z);
+		float haloMixer = 1/pow(distance(fragPos, lightPosition[i].xy)*lightPosition[i].z, z);
 		float adjuster = 1/pow(1.4, z);
 		float haloFinal = haloMixer-adjuster;
 		if(haloFinal < 0){
 			haloFinal = 0;
 		}
+		
 	
 		vec3 diffuse = mix(diff * lightColor[i], vec3(1.0, 1.0, 1.0), haloFinal);
-		result = result + ((calculateLighting[i]*diffuse) + ambient);
+		result = result + ((calculateLighting[i]*diffuse));
+		
 	}
 
-
-	result = result * texture(tex1, Texcoord).xyz;
-	outColor = vec4(result,1.0f);
+	
+	vec3 fin = (ambient + result) * texture(tex1, finTexCoord).xyz;
+	outColor = vec4(fin,1.0f);
 
 }

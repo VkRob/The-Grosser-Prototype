@@ -17,11 +17,13 @@ public class Vector3f {
 
 	/**
 	 * Creates a default 3-tuple vector with all values set to 0.
+	 * @param f 
+	 * @param v 
 	 */
-	public Vector3f() {
-		this.x = 0f;
-		this.y = 0f;
-		this.z = 0f;
+	public Vector3f(Vector2f v, float z) {
+		this.x = v.x;
+		this.y = v.y;
+		this.z = z;
 	}
 
 	/**

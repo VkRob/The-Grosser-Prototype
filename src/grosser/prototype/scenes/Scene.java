@@ -13,4 +13,6 @@ public abstract class Scene {
 
 	public abstract void render();
 
+	public abstract void handleInput(char key);
+
 }

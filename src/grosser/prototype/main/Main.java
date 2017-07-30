@@ -14,7 +14,7 @@ public class Main {
 	public static final float HEIGHT = 600.0f;
 
 	public static void main(String[] args) {
-		new Window("Engine Test", (int) WIDTH, (int) HEIGHT);
+		new Window("Losing Power", (int) WIDTH, (int) HEIGHT);
 	}
 
 }

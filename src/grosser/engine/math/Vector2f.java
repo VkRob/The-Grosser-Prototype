@@ -33,6 +33,11 @@ public class Vector2f {
 		this.y = y;
 	}
 
+	public Vector2f(Vector2f oldVec) {
+		this.x = oldVec.x;
+		this.y = oldVec.y;
+	}
+
 	/**
 	 * Calculates the squared length of the vector.
 	 *

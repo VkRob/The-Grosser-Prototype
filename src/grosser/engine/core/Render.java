@@ -1,7 +1,7 @@
 package grosser.engine.core;
 
 import grosser.engine.math.Matrix4f;
-import grosser.engine.math.Vector3f;
+import grosser.prototype.entity.Camera;
 import grosser.prototype.main.Main;
 import grosser.prototype.scenes.SceneManager;
 
@@ -10,21 +10,19 @@ public class Render {
 	public static final int sizeOf_GL_FLOAT = 4;
 
 	private Matrix4f projectionMatrix;
-	private Vector3f camera_pos = new Vector3f(1.0f, 1.0f, 20.0f);
-	private float camera_speed = 0.1f;
+	private static float cameraZoom = 20f;
 
-	
 	private SceneManager game;
+	private Camera camera;
 
-	private int framebuffer;
-	private int textureColorbuffer;
+	// private int framebuffer;
+	// private int textureColorbuffer;
 
 	public Render() {
+		camera = new Camera();
 		projectionMatrix = Matrix4f.perspective(45.0f, Main.WIDTH / Main.HEIGHT, 1.0f, 100.0f);
 		game = new SceneManager(this);
-		
-		
-		
+
 		/*
 		 * This bit of commented out code is for framebuffers, which will allow
 		 * us to add post processing effects
@@ -52,35 +50,31 @@ public class Render {
 
 	}
 
+	public void update() {
+		game.getCurrentScene().update();
+	}
+
 	public void render() {
 		game.getCurrentScene().render();
 	}
 
-	public void moveW() {
-		camera_pos.y -= camera_speed;
-	}
-
-	public void moveS() {
-		camera_pos.y += camera_speed;
-	}
-
-	public void moveA() {
-		camera_pos.x -= camera_speed;
-	}
-
-	public void moveD() {
-		camera_pos.x += camera_speed;
-	}
-
-	public void moveLight(char key) {
-		game.scene_game.moveLight(key);
+	public void handleInput(char key) {
+		game.getCurrentScene().handleInput(key);
 	}
 
 	public Matrix4f getProjectionMatrix() {
 		return projectionMatrix;
 	}
 
-	public Vector3f getCameraPosition() {
-		return camera_pos;
+	public Camera getCamera() {
+		return camera;
+	}
+
+	public static float getCameraZoom() {
+		return cameraZoom;
+	}
+
+	public void setCameraZoom(float cameraZoom) {
+		this.cameraZoom = cameraZoom;
 	}
 }

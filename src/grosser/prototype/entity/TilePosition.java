@@ -1,4 +1,4 @@
-package grosser.prototype.map;
+package grosser.prototype.entity;
 
 /**
  * @author Ben Class to represent a position of a tile.
