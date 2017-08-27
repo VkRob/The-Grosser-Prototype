@@ -2,67 +2,59 @@
 -- It links methods and classes in the Java parts of the program to
 -- Lua objects and methods for easy reference.
 
-Engine = {
+--Scripting Memory Management
+function getVar(my_scene, id)
+  return my_scene:getScriptVars():get(id);
+end
+function addVar(my_scene, obj)
+  my_scene:getScriptVars():add(obj);
+  return my_scene:getScriptVars():size()-1;
+end
+function createVar(my_scene, obj)
+  return getVar(my_scene, addVar(my_scene, obj));
+end
 
-    Scene = {
-      ManagerClass = luajava.bindClass("engine.logic.SceneManager");
-      Class = luajava.bindClass("engine.logic.Scene");
+--Scene
+Scene_Manager = luajava.bindClass("engine.logic.SceneManager");
+scene_manager = luajava.bindClass("engine.Engine").sceneManager;
+Scene = luajava.bindClass("engine.logic.Scene");
+current_scene = luajava.bindClass("engine.Engine").sceneManager:getCurrentScene();
+camera = luajava.bindClass("engine.Engine").sceneManager:getCurrentScene():getCamera();
 
-      ManagerInstance = luajava.bindClass("engine.Engine").sceneManager;
-      CurrentScene = luajava.bindClass("engine.Engine").sceneManager:getCurrentScene();
-      Camera = luajava.bindClass("engine.Engine").sceneManager:getCurrentScene():getCamera();
-    },
+--Math
+function new_Vector2f(x,y)
+  return luajava.newInstance("org.joml.Vector2f", x, y);
+end
+function round(num)
+  return math.floor(num + 0.5);
+end
 
-    --The Maths Sub-Struct, primarily for JOGL bindings
-    Math = {
+--Entity
+Entity = luajava.bindClass("engine.entity.Entity");
+function new_EntitySprite()
+  return luajava.newInstance("engine.entity.EntitySprite");
+end
+function new_TileEntityXY(x, y, id)
+  return luajava.newInstance("engine.entity.TileEntity", new_Vector2f(x, y), id);
+end
+function new_TileEntity(pos, id)
+  return luajava.newInstance("engine.entity.TileEntity", pos, id);
+end
 
-      --Returns a Vector2f of x and y
-      Vector2f = function(x, y)
-        return luajava.newInstance("org.joml.Vector2f", x, y);
-      end,
-    },
 
-    --The Input Sub-Struct
-    Input = {
-      Class = luajava.bindClass("input.Input"),
-      getKey = function(name)
-        return luajava.bindClass("input.Input"):getKeyByName(name);
-      end,
-      isLeftClick = function()
-        return luajava.bindClass("input.Input"):isLeftClickDown();
-      end,
-      getMouseWorldPos = function(camera)
-        return luajava.bindClass("input.Input"):getMouseWorldPosition(camera);
-      end,
-    },
+--Tile
+Tile = luajava.bindClass("engine.tile.Tile");
 
-    --The Entity Sub-Struct
-    Entity = {
-      Class = luajava.bindClass("engine.entity.Entity");
-
-      EntitySprite = function()
-        return luajava.newInstance("engine.entity.EntitySprite");
-      end,
-      --Returns a TileEntity of specified id and position
-      TileEntity = function(pos, id)
-        return luajava.newInstance("engine.entity.TileEntity", pos, id);
-      end,
-      --Returns a TileEntity of specified id and position
-      TileEntity = function(x, y, id)
-        return luajava.newInstance("engine.entity.TileEntity", Engine.Math.Vector2f(x, y), id);
-      end,
-    },
-
-    --The Tile Sub-Struct
-    Tile = {
-
-      --The Tile Class (used for referencing static methods)
-      Class = luajava.bindClass("engine.tile.Tile"),
-
-      --Returns a tile ID (can also be accessed with Tile.Class.getTileID(name), but this is a "shortcut")
-      getTileID = function(name)
-        return Engine.Tile.Class:getTileID(name);
-      end,
-
-    },
-};
+--Input
+Input = {
+  Class = luajava.bindClass("input.Input"),
+  getKey = function(name)
+    return luajava.bindClass("input.Input"):getKeyByName(name);
+  end,
+  isLeftClick = function()
+    return luajava.bindClass("input.Input"):isLeftClickDown();
+  end,
+  getMouseWorldPos = function(camera)
+    return luajava.bindClass("input.Input"):getMouseWorldPosition(camera);
+  end,
+}

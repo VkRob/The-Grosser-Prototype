@@ -6,11 +6,11 @@ function GenerateWorld(world)
     for y = 0, 10, 1 do
       local id;
       if(x%2 == 0) then
-        id = Engine.Tile.getTileID("grass");
+        id = 0;
       else
-        id = Engine.Tile.getTileID("stone");
+        id = 1;
       end
-      world:getTiles():add(Engine.Entity.TileEntity(x, y, id));
+      world:getTiles():add(new_TileEntityXY(x, y, id));
     end
   end
 end

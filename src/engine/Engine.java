@@ -24,7 +24,7 @@ public class Engine {
 		sceneManager = new SceneManager();
 
 		// Create the Window Params
-		WindowParams windowParams = new WindowParams("hello engine", 800, 600);
+		WindowParams windowParams = new WindowParams("grosser", 800, 600);
 
 		// Create the Window
 		WindowManager window = new WindowManager(windowParams, sceneManager);

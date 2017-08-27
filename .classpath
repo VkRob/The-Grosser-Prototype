@@ -3,8 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="res"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/LuaJ"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/LWJGL3"/>
 	<classpathentry kind="lib" path="dependecies/joml/joml-1.9.4.jar"/>
-	<classpathentry kind="lib" path="dependecies/luaj/luaj-jse-3.0.1.jar"/>
 	<classpathentry kind="output" path="opengl engine/Engine/bin"/>
 </classpath>
