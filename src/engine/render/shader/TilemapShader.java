@@ -14,6 +14,7 @@ public class TilemapShader {
 	private ShaderUniform uniScaling;
 	private ShaderUniform uniProj;
 	private ShaderUniform uniModel;
+	private ShaderUniform uniTint;
 
 	public void use() {
 		tileShader.use();
@@ -65,6 +66,10 @@ public class TilemapShader {
 		tileShader.createUniform(uniScaling);
 		tileShader.loadUniformFloat(uniScaling, 0.1f);
 
+		uniTint = new ShaderUniform("tint");
+		tileShader.createUniform(uniTint);
+		tileShader.loadUniformVector3f(uniTint, new Vector3f(1, 1, 1));
+
 		Vector2f size = new Vector2f(200.0f, 200.0f);
 
 		Matrix4f modelMat = new Matrix4f();
@@ -93,5 +98,10 @@ public class TilemapShader {
 		tileShader.loadUniformMatrix4f(uniProj, p.ortho(0.0f, (float) width, 0.0f, (float) height, -1.0f, 1.0f));
 
 		tileShader.loadTexture(Texture.loadTexture("/texture/test.png"));
+	}
+
+	public void loadUniformsTint(Vector3f tint) {
+		tileShader.use();
+		tileShader.loadUniformVector3f(uniTint, tint);
 	}
 }

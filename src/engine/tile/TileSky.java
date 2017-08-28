@@ -2,9 +2,9 @@ package engine.tile;
 
 import org.joml.Vector2f;
 
-public class TileGrass extends Tile {
+public class TileSky extends Tile {
 
-	public TileGrass() {
+	public TileSky() {
 		super(new Vector2f(0, 0));
 	}
 

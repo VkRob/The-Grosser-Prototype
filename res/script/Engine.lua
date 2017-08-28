@@ -14,6 +14,11 @@ function createVar(my_scene, obj)
   return getVar(my_scene, addVar(my_scene, obj));
 end
 
+--Java Native Lib
+function new_ArrayList()
+  return luajava.bindClass("engine.script.Script"):getNewArrayList();
+end
+
 --Scene
 Scene_Manager = luajava.bindClass("engine.logic.SceneManager");
 scene_manager = luajava.bindClass("engine.Engine").sceneManager;
@@ -24,6 +29,9 @@ camera = luajava.bindClass("engine.Engine").sceneManager:getCurrentScene():getCa
 --Math
 function new_Vector2f(x,y)
   return luajava.newInstance("org.joml.Vector2f", x, y);
+end
+function new_Vector3f(x,y,z)
+  return luajava.newInstance("org.joml.Vector3f", x, y, z);
 end
 function round(num)
   return math.floor(num + 0.5);
@@ -41,20 +49,22 @@ function new_TileEntity(pos, id)
   return luajava.newInstance("engine.entity.TileEntity", pos, id);
 end
 
-
 --Tile
 Tile = luajava.bindClass("engine.tile.Tile");
 
 --Input
 Input = {
-  Class = luajava.bindClass("input.Input"),
+  Class = luajava.bindClass("engine.input.Input"),
   getKey = function(name)
-    return luajava.bindClass("input.Input"):getKeyByName(name);
+    return luajava.bindClass("engine.input.Input"):getKeyByName(name);
   end,
   isLeftClick = function()
-    return luajava.bindClass("input.Input"):isLeftClickDown();
+    return luajava.bindClass("engine.input.Input"):isLeftClickDown();
   end,
   getMouseWorldPos = function(camera)
-    return luajava.bindClass("input.Input"):getMouseWorldPosition(camera);
+    return luajava.bindClass("engine.input.Input"):getMouseWorldPosition(camera);
+  end,
+  getMouseScreenPos = function()
+    return luajava.bindClass("engine.input.Input"):getMouseScreenPosition();
   end,
 }

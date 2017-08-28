@@ -26,7 +26,7 @@ public class EntitySprite extends Entity {
 		return dimensions;
 	}
 
-	public Vector2f getTextureCoords() {
+	public Vector2f getTexCoords() {
 		return texCoords;
 	}
 

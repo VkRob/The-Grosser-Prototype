@@ -16,6 +16,7 @@ public class SpriteShader {
 	private ShaderUniform uniQProj;
 	private ShaderUniform uniQModel;
 	private ShaderUniform uniTexCoords;
+	private ShaderUniform uniTint;
 
 	public void init() {
 		shader = new Shader(Shader.loadFile("/shader/vertex.glsl"), Shader.loadFile("/shader/fragment.glsl"));
@@ -34,6 +35,10 @@ public class SpriteShader {
 		uniQScaling = new ShaderUniform("scaling");
 		shader.createUniform(uniQScaling);
 		shader.loadUniformFloat(uniQScaling, 0.1f);
+
+		uniTint = new ShaderUniform("tint");
+		shader.createUniform(uniTint);
+		shader.loadUniformVector3f(uniTint, new Vector3f(1, 1, 1));
 
 		Vector2f size = new Vector2f(200.0f, 200.0f);
 
@@ -93,5 +98,15 @@ public class SpriteShader {
 
 		shader.loadUniformVector4f(uniTexCoords, new Vector4f(texCoords.x, texCoords.y, 16, 16));
 
+	}
+
+	public Shader getShader() {
+		return shader;
+	}
+
+	public void loadUniformTint(Vector3f tint) {
+		shader.use();
+		shader.loadUniformVector3f(uniTint, tint);
+		//shader.stop();
 	}
 }

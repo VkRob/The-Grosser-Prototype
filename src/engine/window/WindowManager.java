@@ -160,7 +160,7 @@ public class WindowManager {
 	 */
 	public void updateFPS() {
 		if (getTime() - lastFPS > 1000) {
-			//System.out.println("FPS: " + fps);
+			System.out.println("FPS: " + fps);
 			fps = 0;
 			if (lastFPS + 2000 < getTime())
 				lastFPS = getTime();

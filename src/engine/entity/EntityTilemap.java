@@ -7,6 +7,7 @@ import org.joml.Vector2f;
 import engine.render.TextureAtlas;
 import engine.script.Script;
 import engine.tile.Tile;
+import engine.tile.TileSky;
 import engine.util.Log;
 
 public class EntityTilemap extends Entity {
@@ -15,6 +16,7 @@ public class EntityTilemap extends Entity {
 
 	private Vector2f position;
 	private ArrayList<TileEntity> tiles;
+	private ArrayList<Vector2f> chunks;
 
 	private TextureAtlas atlas;
 
@@ -23,6 +25,8 @@ public class EntityTilemap extends Entity {
 	// Mesh Data
 	private float[] vertices;
 	private int[] elements;
+
+	private int chunkSize = 10;
 
 	public EntityTilemap() {
 		super(Entity.TYPE_TILEMAP);
@@ -34,6 +38,7 @@ public class EntityTilemap extends Entity {
 
 		atlas = new TextureAtlas(new Vector2f(16, 16));
 		tiles = new ArrayList<TileEntity>();
+		setChunks(new ArrayList<Vector2f>());
 
 		// for (int x = 0; x < 10; x++) {
 		// for (int y = 0; y < 10; y++) {
@@ -42,7 +47,7 @@ public class EntityTilemap extends Entity {
 		// }
 
 		script = new Script("GenerateWorld.lua");
-		script.execute("GenerateWorld", this);
+		script.execute("GenerateChunk", this, new Vector2f(0, 0));
 
 		generateNewMesh(new Vector2f(0, 0), new Vector2f(100, 100));
 	}
@@ -73,7 +78,7 @@ public class EntityTilemap extends Entity {
 
 			// if (intersects(cullingPosition, cullingRect, t, new Vector2f(1,
 			// 1))) {
-			if (true) {
+			if (!(tile.getTileType() instanceof TileSky)) {
 				/* Top Left */
 
 				// Position
@@ -194,7 +199,13 @@ public class EntityTilemap extends Entity {
 
 	@Override
 	public void update() {
-
+		float chunkSizeUnits = 40 * chunkSize;
+		Vector2f cameraPos = engine.Engine.sceneManager.getCurrentScene().getCamera().getPosition();
+		Vector2f currentTile = new Vector2f((Math.round(cameraPos.x / chunkSizeUnits) * chunkSizeUnits) / 40,
+				(Math.round(cameraPos.y / chunkSizeUnits) * chunkSizeUnits) / 40);
+		if (getTileAtPos(currentTile) == null) {
+			script.execute("GenerateChunk", this, currentTile);
+		}
 	}
 
 	public ArrayList<TileEntity> getTiles() {
@@ -203,6 +214,22 @@ public class EntityTilemap extends Entity {
 
 	public void setTiles(ArrayList<TileEntity> tiles) {
 		this.tiles = tiles;
+	}
+
+	public int getChunkSize() {
+		return chunkSize;
+	}
+
+	public void setChunkSize(int chunkSize) {
+		this.chunkSize = chunkSize;
+	}
+
+	public ArrayList<Vector2f> getChunks() {
+		return chunks;
+	}
+
+	public void setChunks(ArrayList<Vector2f> chunks) {
+		this.chunks = chunks;
 	}
 
 }

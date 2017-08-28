@@ -1,5 +1,7 @@
 package engine.entity;
 
+import org.joml.Vector3f;
+
 import engine.logic.Scene;
 
 public abstract class Entity {
@@ -12,6 +14,8 @@ public abstract class Entity {
 	private int type;
 
 	protected Scene parentScene;
+
+	private Vector3f tint = new Vector3f(1, 1, 1);
 
 	public Entity(int type) {
 		this.setType(type);
@@ -33,5 +37,13 @@ public abstract class Entity {
 
 	public void setParentScene(Scene parentScene) {
 		this.parentScene = parentScene;
+	}
+
+	public Vector3f getTint() {
+		return tint;
+	}
+
+	public void setTint(Vector3f tint) {
+		this.tint = tint;
 	}
 }

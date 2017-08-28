@@ -11,8 +11,16 @@ public abstract class Tile {
 
 	public static void registerTiles() {
 		registry = new Tile[numOfTiles];
-		registerTile(0, "grass", new TileGrass());
-		registerTile(1, "stone", new TileStone());
+		registerTile(0, "sky", new TileSky());
+		registerTile(1, "grass", new TileNormal(new Vector2f(0, 0)));
+		registerTile(2, "stone", new TileNormal(new Vector2f(1, 0)));
+		registerTile(3, "dirt", new TileNormal(new Vector2f(2, 0)));
+		registerTile(4, "grass_side", new TileNormal(new Vector2f(3, 0)));
+		registerTile(5, "planks", new TileNormal(new Vector2f(4, 0)));
+		registerTile(6, "planks", new TileNormal(new Vector2f(5, 0)));
+		registerTile(7, "planks", new TileNormal(new Vector2f(6, 0)));
+		registerTile(8, "planks", new TileNormal(new Vector2f(7, 0)));
+		registerTile(9, "planks", new TileNormal(new Vector2f(8, 0)));
 	}
 
 	private static void registerTile(int id, String string, Tile tile) {

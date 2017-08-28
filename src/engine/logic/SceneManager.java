@@ -1,8 +1,8 @@
 package engine.logic;
 
+import engine.input.Input;
 import engine.render.RenderCore;
 import game.SceneGame;
-import input.Input;
 
 public class SceneManager {
 

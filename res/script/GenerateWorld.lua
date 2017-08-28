@@ -1,16 +1,19 @@
 local lib = require("script.Engine");
 
+local chunkSize = 10;
+
 -- Generate a 10x10 area of grass & stone blocks
-function GenerateWorld(world)
-  for x = 0, 10, 1 do
-    for y = 0, 10, 1 do
+function GenerateChunk(world, chunk_pos)
+  world:setChunkSize(chunkSize);
+  for x = 0, chunkSize-1, 1 do
+    for y = 0, chunkSize-1, 1 do
       local id;
       if(x%2 == 0) then
-        id = 0;
+        id = 8;
       else
-        id = 1;
+        id = 6;
       end
-      world:getTiles():add(new_TileEntityXY(x, y, id));
+      world:getTiles():add(new_TileEntityXY(chunk_pos.x + x, chunk_pos.y + y, id));
     end
   end
 end

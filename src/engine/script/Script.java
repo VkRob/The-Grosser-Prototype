@@ -1,5 +1,8 @@
 package engine.script;
 
+import java.util.ArrayList;
+
+import org.joml.Vector2f;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.luaj.vm2.lib.jse.JsePlatform;
@@ -7,6 +10,10 @@ import org.luaj.vm2.lib.jse.JsePlatform;
 import engine.util.Log;
 
 public class Script {
+
+	public static ArrayList<Object> getNewArrayList() {
+		return new ArrayList<Object>();
+	}
 
 	private static final String scriptFolder = "./script/";
 
@@ -52,6 +59,15 @@ public class Script {
 		LuaValue luaFunction = luaGlobals.get(functionName);
 		if (!luaFunction.isnil()) {
 			luaFunction.call();
+		} else {
+			Log.error("Lua Function not found");
+		}
+	}
+
+	public void execute(String functionName, Object arg, Object arg2) {
+		LuaValue luaFunction = luaGlobals.get(functionName);
+		if (!luaFunction.isnil()) {
+			luaFunction.call(loadToLua(arg), loadToLua(arg2));
 		} else {
 			Log.error("Lua Function not found");
 		}

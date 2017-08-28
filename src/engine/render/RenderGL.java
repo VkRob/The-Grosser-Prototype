@@ -19,6 +19,7 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
+import engine.render.shader.Shader;
 import engine.render.shader.SpriteShader;
 import engine.render.shader.TilemapShader;
 
@@ -148,5 +149,10 @@ public class RenderGL {
 
 	public void loadUniformsToSpriteShader(Vector2f texCoords, Vector2f entityPosition, Vector2f cameraPosition) {
 		spriteShader.loadUniformsToShader(texCoords, entityPosition, cameraPosition);
+	}
+
+	public void loadTintToShaders(Vector3f tint) {
+		spriteShader.loadUniformTint(tint);
+		tileMapShader.loadUniformsTint(tint);
 	}
 }

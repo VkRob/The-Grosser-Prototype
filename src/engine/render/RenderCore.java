@@ -49,7 +49,7 @@ public class RenderCore {
 
 	private void renderSprite(EntitySprite sprite) {
 		renderGL.bindQuad();
-		renderGL.loadUniformsToSpriteShader(sprite.getTextureCoords(), sprite.getPosition(),
+		renderGL.loadUniformsToSpriteShader(sprite.getTexCoords(), sprite.getPosition(),
 				currentCamera.getPosition());
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		renderGL.unbind();
@@ -57,13 +57,14 @@ public class RenderCore {
 
 	private void renderGuiElement(EntitySprite sprite) {
 		renderGL.bindQuad();
-		renderGL.loadUniformsToSpriteShader(sprite.getTextureCoords(), sprite.getPosition(), new Vector2f(0, 0));
+		renderGL.loadUniformsToSpriteShader(sprite.getTexCoords(), sprite.getPosition(), new Vector2f(0, 0));
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		renderGL.unbind();
 	}
 
 	public void render(Scene currentScene) {
 		for (Entity e : currentScene.getEntities()) {
+			renderGL.loadTintToShaders(e.getTint());
 			switch (e.getType()) {
 			case Entity.TYPE_BACKGROUND:
 				renderBackground((EntityBackground) e);

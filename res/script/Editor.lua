@@ -1,48 +1,104 @@
 local lib = require("script.Engine");
 local cameraMover = require("script.Camera");
 
+local numOftiles = 9;
+
+--local selected_tile_var_id = 0;
+--local tile_list_var_id = 1;
+
 local gui = {
-  tileType;
+  selected_tile,
+  tile_list,
+  cursor,
 };
 
 function Init(hEditor)
-  gui.tileType = createVar(hEditor, new_EntitySprite());
-  hEditor:addEntity(gui.tileType);
+  gui.selected_tile = createVar(hEditor, new_EntitySprite());
+  gui.tile_list = createVar(hEditor, new_ArrayList());
+  gui.cursor = createVar(hEditor, new_EntitySprite());
+
+  for i=1, numOftiles, 1 do
+    e = new_EntitySprite();
+    e:setType(Entity.TYPE_GUI);
+    gui.tile_list:add(e);
+    hEditor:addEntity(e)
+  end
+
+  gui.selected_tile:setType(Entity.TYPE_GUI);
+  hEditor:addEntity(gui.selected_tile);
+  hEditor:addEntity(gui.cursor);
 end
 
 function Run(hEditor)
-  gui.tileType = getVar(hEditor, 0);
 
-  gui.tileType:setPosition(new_Vector2f(100, 40));
-  gui.tileType:setType(Entity.TYPE_GUI);
+  gui.selected_tile = getVar(hEditor, 0);
+  gui.tile_list = getVar(hEditor, 1);
+  gui.cursor = getVar(hEditor, 2);
 
-  if(Input.getKey("A"):isDown()) then
-    gui.tileType:setTexCoords(new_Vector2f(1,0));
-    hEditor:setCursorTileID(1);
+  local mouseX = Input.getMouseScreenPos().x;
+  local mouseY = Input.getMouseScreenPos().y;
+
+  --[FOR every gui tile, check if it is being clicked on by the mouse]
+
+  --TODO: Handle Aspect Ratios
+  for i=0, numOftiles-1, 1 do
+    local it = gui.tile_list:get(i);
+    it:setPosition(new_Vector2f(40,500-i*40));
+    it:setTexCoords(new_Vector2f(i-1,0));
+
+    local myWidth = 40;
+    local myHeight = 40;
+    local myX = it:getPosition().x-myWidth/2;
+    local myY = it:getPosition().y-myHeight/2;
+    if(mouseX >= myX and mouseX <= myX+myWidth) then
+      if(mouseY >= myY and mouseY <= myY+myHeight) then
+      --Change visual effect
+      end
+    end
+    local isMouseOver = false;
+    if(mouseX >= myX and mouseX <= myX+myWidth) then
+      if(mouseY >= myY and mouseY <= myY+myHeight) then
+        isMouseOver = true;
+      end
+    end
+    if(isMouseOver)then
+      it:setTint(new_Vector3f(0.5,0.5,0.5));
+      if(Input.isLeftClick())then
+        hEditor:setCursorTileID(i);
+      end
+    else
+      it:setTint(new_Vector3f(1,1,1));
+    end
   end
 
-  if(Input.getKey("D"):isDown()) then
-    gui.tileType:setTexCoords(new_Vector2f(0,0));
-    hEditor:setCursorTileID(0);
-  end
+  gui.selected_tile:setPosition(new_Vector2f(40, 40));
 
-
+  gui.selected_tile:setTexCoords(new_Vector2f(hEditor:getCursorTileID()-1,0));
   -- Move the camera with the arrow keys
   MoveCamera();
 
-  -- Set the cursor position to the tile nearest the mouse position
-  local cursor = hEditor:getTileToPlace();
-  local mouseWorldPos = Input.getMouseWorldPos(camera);
-  mouseWorldPos.x = round(mouseWorldPos.x/40)*40;
-  mouseWorldPos.y = round(mouseWorldPos.y/40)*40;
-  cursor:setPosition(mouseWorldPos);
 
-  -- If the mouse is clicked, set the selected tile
-  if(Input.isLeftClick()) then
+  if mouseX>60 then
+    -- Set the cursor position to the tile nearest the mouse position
+    local mouseWorldPos = Input.getMouseWorldPos(camera);
+    mouseWorldPos.x = round(mouseWorldPos.x/40)*40;
+    mouseWorldPos.y = round(mouseWorldPos.y/40)*40;
+
     local cursorTilePos = new_Vector2f(mouseWorldPos.x / 40, mouseWorldPos.y / 40);
     local tileAtPos = hEditor:getWorld():getTileAtPos(cursorTilePos);
-    if (not (tileAtPos == nil)) then
-      tileAtPos:setTileType(hEditor:getCursorTileID());
+    
+    gui.cursor:setType(Entity.TYPE_GUI);
+    gui.cursor:setPosition(new_Vector2f(-100,-100));
+    -- If the mouse is clicked, set the selected tile
+    if (not(tileAtPos == nil)) then
+      gui.cursor:setType(Entity.TYPE_SPRITE);
+      gui.cursor:setPosition(mouseWorldPos);
+      gui.cursor:setTexCoords(tileAtPos:getTileType():getTextureCoords());
+      gui.cursor:setTint(new_Vector3f(0.5,0.5,0.5));
+      if(Input.isLeftClick()) then
+        tileAtPos:setTileType(hEditor:getCursorTileID());
+      end
     end
+
   end
 end

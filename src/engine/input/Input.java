@@ -1,4 +1,4 @@
-package input;
+package engine.input;
 
 import static org.lwjgl.glfw.GLFW.GLFW_CURSOR;
 import static org.lwjgl.glfw.GLFW.GLFW_CURSOR_HIDDEN;
@@ -10,6 +10,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
+import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_1;
 import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
 import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
@@ -56,6 +57,8 @@ public class Input {
 		keys.add(new Key("DOWN", GLFW_KEY_DOWN));
 		keys.add(new Key("LEFT", GLFW_KEY_LEFT));
 		keys.add(new Key("RIGHT", GLFW_KEY_RIGHT));
+
+		keys.add(new Key("SHIFT", GLFW_KEY_LEFT_SHIFT));
 	}
 
 	public static void processKey(int keyID, int state) {
@@ -80,7 +83,8 @@ public class Input {
 	}
 
 	public static void grabMouse() {
-		glfwSetInputMode(WindowManager.windowID, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+		// glfwSetInputMode(WindowManager.windowID, GLFW_CURSOR,
+		// GLFW_CURSOR_HIDDEN);
 	}
 
 	public static Vector2f getMouseScreenPosition() {

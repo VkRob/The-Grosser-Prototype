@@ -1,6 +1,7 @@
 package engine.entity;
 
 import org.joml.Vector2f;
+import org.joml.Vector3f;
 
 import engine.tile.Tile;
 
@@ -37,4 +38,5 @@ public class TileEntity {
 	public Vector2f getTextureCoords() {
 		return tileType.getTextureCoords();
 	}
+
 }

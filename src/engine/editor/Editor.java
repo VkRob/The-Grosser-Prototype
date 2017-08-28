@@ -14,7 +14,6 @@ public class Editor extends Scene {
 	private Script editorScript;
 
 	private EntityTilemap world;
-	private EntitySprite tileToPlace;
 
 	private int cursorTileID = 0;
 
@@ -26,12 +25,9 @@ public class Editor extends Scene {
 
 	@Override
 	public void init() {
-		tileToPlace = new EntitySprite();
 
 		this.addEntity(new EntityBackground(new Vector3f(0, 0, 0)));
 		this.addEntity(world); // world is added from the SceneGame
-
-		this.addEntity(tileToPlace);
 
 		editorScript = new Script("Editor.lua");
 		editorScript.execute("Init", this);
@@ -54,14 +50,6 @@ public class Editor extends Scene {
 
 	public void setWorld(EntityTilemap world) {
 		this.world = world;
-	}
-
-	public EntitySprite getTileToPlace() {
-		return tileToPlace;
-	}
-
-	public void setTileToPlace(EntitySprite tileToPlace) {
-		this.tileToPlace = tileToPlace;
 	}
 
 	public int getCursorTileID() {
