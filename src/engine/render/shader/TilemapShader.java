@@ -49,7 +49,7 @@ public class TilemapShader {
 	}
 
 	public void init() {
-		tileShader = new Shader(Shader.loadFile("/shader/vertex.glsl"), Shader.loadFile("/shader/fragment.glsl"));
+		tileShader = new Shader(Shader.loadFile("/shader/tile/vertex.glsl"), Shader.loadFile("/shader/tile/fragment.glsl"));
 		tileShader.addAttrib(new ShaderAttrib("position", 2));
 		tileShader.addAttrib(new ShaderAttrib("texcoord", 2));
 		tileShader.pushAttribs();

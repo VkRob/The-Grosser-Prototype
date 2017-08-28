@@ -29,7 +29,6 @@ import engine.entity.Camera;
 import engine.window.WindowManager;
 
 public class Input {
-
 	private static Key getKeyByID(int id) {
 		for (Key k : keys) {
 			if (k.getId() == id)

@@ -15,8 +15,6 @@ public abstract class Entity {
 
 	protected Scene parentScene;
 
-	private Vector3f tint = new Vector3f(1, 1, 1);
-
 	public Entity(int type) {
 		this.setType(type);
 	}
@@ -39,11 +37,4 @@ public abstract class Entity {
 		this.parentScene = parentScene;
 	}
 
-	public Vector3f getTint() {
-		return tint;
-	}
-
-	public void setTint(Vector3f tint) {
-		this.tint = tint;
-	}
 }

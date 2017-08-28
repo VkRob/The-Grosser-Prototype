@@ -35,6 +35,7 @@ import static org.lwjgl.opengl.GL20.glUniform1f;
 import static org.lwjgl.opengl.GL20.glUniform2f;
 import static org.lwjgl.opengl.GL20.glUniform3f;
 import static org.lwjgl.opengl.GL20.glUniform4f;
+import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
 import static org.lwjgl.opengl.GL20.glUseProgram;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
@@ -166,6 +167,13 @@ public class Shader {
 
 	public void loadUniformVector4f(ShaderUniform uniform, Vector4f vec) {
 		glUniform4f(uniform.getId(), vec.x, vec.y, vec.z, vec.w);
+	}
+
+	public void loadUniformBool(ShaderUniform uniform, boolean b) {
+		if (b)
+			glUniform1i(uniform.getId(), 1);
+		else
+			glUniform1i(uniform.getId(), 0);
 	}
 
 	public void addAttrib(ShaderAttrib shaderAttrib) {

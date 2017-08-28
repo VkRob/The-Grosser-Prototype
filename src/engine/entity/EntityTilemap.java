@@ -7,7 +7,7 @@ import org.joml.Vector2f;
 import engine.render.TextureAtlas;
 import engine.script.Script;
 import engine.tile.Tile;
-import engine.tile.TileSky;
+import engine.tile.TileVoid;
 import engine.util.Log;
 
 public class EntityTilemap extends Entity {
@@ -72,13 +72,14 @@ public class EntityTilemap extends Entity {
 		int ctr = 0;
 		final float size = 1f;
 		final float halfSize = size / 2;
-		for (TileEntity tile : tiles) {
 
+		for (TileEntity tile : tiles) {
 			Vector2f t = tile.getPosition();
 
 			// if (intersects(cullingPosition, cullingRect, t, new Vector2f(1,
 			// 1))) {
-			if (!(tile.getTileType() instanceof TileSky)) {
+
+			if (!(tile.getTileType() instanceof TileVoid)) {
 				/* Top Left */
 
 				// Position
@@ -197,15 +198,42 @@ public class EntityTilemap extends Entity {
 		return ((rw < rx || rw > tx) && (rh < ry || rh > ty) && (tw < tx || tw > rx) && (th < ty || th > ry));
 	}
 
-	@Override
-	public void update() {
+	private Vector2f getChunkLocalPos(Vector2f pos) {
 		float chunkSizeUnits = 40 * chunkSize;
 		Vector2f cameraPos = engine.Engine.sceneManager.getCurrentScene().getCamera().getPosition();
-		Vector2f currentTile = new Vector2f((Math.round(cameraPos.x / chunkSizeUnits) * chunkSizeUnits) / 40,
-				(Math.round(cameraPos.y / chunkSizeUnits) * chunkSizeUnits) / 40);
-		if (getTileAtPos(currentTile) == null) {
-			script.execute("GenerateChunk", this, currentTile);
+		Vector2f v = new Vector2f(
+				(Math.round((cameraPos.x + (chunkSizeUnits * pos.x)) / chunkSizeUnits) * chunkSizeUnits) / 40,
+				(Math.round((cameraPos.y + (chunkSizeUnits * pos.y)) / chunkSizeUnits) * chunkSizeUnits) / 40);
+		return v;
+	}
+
+	public ArrayList<Vector2f> getVisibleChunks() {
+		ArrayList<Vector2f> list = new ArrayList<Vector2f>();
+		for (int x = -1; x <= 2; x++) {
+			for (int y = -1; y <= 2; y++) {
+				list.add(getChunkLocalPos(new Vector2f(x, y)));
+			}
 		}
+
+		// list.add(getChunkLocalPos(new Vector2f(0, 0)));
+		// list.add(getChunkLocalPos(new Vector2f(1, 0)));
+		// list.add(getChunkLocalPos(new Vector2f(2, 0)));
+		// list.add(getChunkLocalPos(new Vector2f(0, 1)));
+		// list.add(getChunkLocalPos(new Vector2f(1, 1)));
+		// list.add(getChunkLocalPos(new Vector2f(-1, 1)));
+		// list.add(getChunkLocalPos(new Vector2f(0, -1)));
+		// list.add(getChunkLocalPos(new Vector2f(1, -1)));
+		return list;
+	}
+
+	@Override
+	public void update() {
+		for (Vector2f v : getVisibleChunks()) {
+			if (getTileAtPos(v) == null) {
+				script.execute("GenerateChunk", this, v);
+			}
+		}
+
 	}
 
 	public ArrayList<TileEntity> getTiles() {

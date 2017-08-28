@@ -6,6 +6,7 @@ import static org.lwjgl.opengl.GL11.glDrawElements;
 
 import org.joml.Vector2f;
 
+import engine.Engine;
 import engine.entity.Camera;
 import engine.entity.Entity;
 import engine.entity.EntityBackground;
@@ -16,7 +17,6 @@ import engine.util.Log;
 
 public class RenderCore {
 
-	private Camera currentCamera;
 	private RenderGL renderGL;
 
 	public RenderCore() {
@@ -33,11 +33,10 @@ public class RenderCore {
 	}
 
 	private void renderTilemap(EntityTilemap map) {
-
 		renderGL.bindTiles();
 		// renderGL.bindQuad();
-		map.generateNewMesh(currentCamera.getPosition(), new Vector2f(1, 1));
-		renderGL.loadUniformsToTileShader(map.getPosition(), currentCamera.getPosition());
+		map.generateNewMesh(getCurrentCamera().getPosition(), new Vector2f(1, 1));
+		renderGL.loadUniformsToTileShader(map.getPosition(), getCurrentCamera().getPosition());
 		if (map.isNeedsUpdating()) {
 			renderGL.updateTileVBO(map.getVertices(), map.getElements());
 			map.setNeedsUpdating(false);
@@ -48,15 +47,18 @@ public class RenderCore {
 	}
 
 	private void renderSprite(EntitySprite sprite) {
+		renderGL.updateQuadVBO(sprite.getDimensions());
 		renderGL.bindQuad();
-		renderGL.loadUniformsToSpriteShader(sprite.getTexCoords(), sprite.getPosition(),
-				currentCamera.getPosition());
+		renderGL.loadSpriteMetaDataUniforms(sprite);
+		renderGL.loadUniformsToSpriteShader(sprite.getTexCoords(), sprite.getPosition(), getCurrentCamera().getPosition());
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		renderGL.unbind();
 	}
 
 	private void renderGuiElement(EntitySprite sprite) {
+		renderGL.updateQuadVBO(sprite.getDimensions());
 		renderGL.bindQuad();
+		renderGL.loadSpriteMetaDataUniforms(sprite);
 		renderGL.loadUniformsToSpriteShader(sprite.getTexCoords(), sprite.getPosition(), new Vector2f(0, 0));
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		renderGL.unbind();
@@ -64,7 +66,7 @@ public class RenderCore {
 
 	public void render(Scene currentScene) {
 		for (Entity e : currentScene.getEntities()) {
-			renderGL.loadTintToShaders(e.getTint());
+			
 			switch (e.getType()) {
 			case Entity.TYPE_BACKGROUND:
 				renderBackground((EntityBackground) e);
@@ -86,11 +88,8 @@ public class RenderCore {
 		}
 	}
 
-	public Camera getCurrentCamera() {
-		return currentCamera;
+	private Camera getCurrentCamera() {
+		return Engine.sceneManager.getCurrentScene().getCamera();
 	}
 
-	public void setCurrentCamera(Camera currentCamera) {
-		this.currentCamera = currentCamera;
-	}
 }

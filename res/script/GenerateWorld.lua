@@ -8,10 +8,10 @@ function GenerateChunk(world, chunk_pos)
   for x = 0, chunkSize-1, 1 do
     for y = 0, chunkSize-1, 1 do
       local id;
-      if(x%2 == 0) then
-        id = 8;
+      if(x%10 == 0 or y%10 == 0) then
+        id = 2;
       else
-        id = 6;
+        id = 1;
       end
       world:getTiles():add(new_TileEntityXY(chunk_pos.x + x, chunk_pos.y + y, id));
     end

@@ -5,6 +5,8 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import engine.entity.Entity;
+import engine.entity.EntitySprite;
 import engine.window.WindowManager;
 
 public class SpriteShader {
@@ -17,9 +19,11 @@ public class SpriteShader {
 	private ShaderUniform uniQModel;
 	private ShaderUniform uniTexCoords;
 	private ShaderUniform uniTint;
+	private ShaderUniform uniUsesTexture;
 
 	public void init() {
-		shader = new Shader(Shader.loadFile("/shader/vertex.glsl"), Shader.loadFile("/shader/fragment.glsl"));
+		shader = new Shader(Shader.loadFile("/shader/sprite/vertex.glsl"),
+				Shader.loadFile("/shader/sprite/fragment.glsl"));
 		shader.addAttrib(new ShaderAttrib("position", 2));
 		shader.addAttrib(new ShaderAttrib("texcoord", 2));
 		shader.pushAttribs();
@@ -39,6 +43,10 @@ public class SpriteShader {
 		uniTint = new ShaderUniform("tint");
 		shader.createUniform(uniTint);
 		shader.loadUniformVector3f(uniTint, new Vector3f(1, 1, 1));
+
+		uniUsesTexture = new ShaderUniform("usesTexture");
+		shader.createUniform(uniUsesTexture);
+		shader.loadUniformBool(uniUsesTexture, true);
 
 		Vector2f size = new Vector2f(200.0f, 200.0f);
 
@@ -104,9 +112,10 @@ public class SpriteShader {
 		return shader;
 	}
 
-	public void loadUniformTint(Vector3f tint) {
+	public void loadEntityMetaDataUniforms(EntitySprite e) {
 		shader.use();
-		shader.loadUniformVector3f(uniTint, tint);
-		//shader.stop();
+		shader.loadUniformVector3f(uniTint, e.getTint());
+		shader.loadUniformBool(uniUsesTexture, e.isUsesTexture());
+		// shader.stop();
 	}
 }

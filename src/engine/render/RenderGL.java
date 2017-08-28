@@ -19,6 +19,7 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
+import engine.entity.EntitySprite;
 import engine.render.shader.Shader;
 import engine.render.shader.SpriteShader;
 import engine.render.shader.TilemapShader;
@@ -62,6 +63,43 @@ public class RenderGL {
 
 	}
 
+	public void updateQuadVBO(Vector2f dimensions) {
+		/* Point 1 */
+		// Pos
+		vertices[0] = -dimensions.x;
+		vertices[1] = dimensions.y;
+		// TexCoord
+		vertices[2] = 0;
+		vertices[3] = 0;
+
+		/* Point 2 */
+		// Pos
+		vertices[4] = dimensions.x;
+		vertices[5] = dimensions.y;
+		// TexCoord
+		vertices[6] = 1;
+		vertices[7] = 0;
+
+		/* Point 3 */
+		// Pos
+		vertices[8] = dimensions.x;
+		vertices[9] = -dimensions.y;
+		// TexCoord
+		vertices[10] = 1;
+		vertices[11] = 1;
+
+		/* Point 4 */
+		// Pos
+		vertices[12] = -dimensions.x;
+		vertices[13] = -dimensions.y;
+		// TexCoord
+		vertices[14] = 0;
+		vertices[15] = 1;
+
+		glBindBuffer(GL_ARRAY_BUFFER, quadVbo);
+		glBufferData(GL_ARRAY_BUFFER, vertices, GL_DYNAMIC_DRAW);
+	}
+
 	private void initQuadShader() {
 		spriteShader.init();
 	}
@@ -69,13 +107,13 @@ public class RenderGL {
 	private void initQuadEBO() {
 		quadEbo = glGenBuffers();
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, quadEbo);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements, GL_DYNAMIC_DRAW);
 	}
 
 	private void initQuadVBO() {
 		quadVbo = glGenBuffers();
 		glBindBuffer(GL_ARRAY_BUFFER, quadVbo);
-		glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, vertices, GL_DYNAMIC_DRAW);
 	}
 
 	private void initQuadVAO() {
@@ -151,8 +189,7 @@ public class RenderGL {
 		spriteShader.loadUniformsToShader(texCoords, entityPosition, cameraPosition);
 	}
 
-	public void loadTintToShaders(Vector3f tint) {
-		spriteShader.loadUniformTint(tint);
-		tileMapShader.loadUniformsTint(tint);
+	public void loadSpriteMetaDataUniforms(EntitySprite sprite) {
+		spriteShader.loadEntityMetaDataUniforms(sprite);
 	}
 }

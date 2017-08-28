@@ -60,7 +60,6 @@ public abstract class Scene {
 
 	public void setCamera(Camera camera) {
 		this.camera = camera;
-		mgr.getRenderCore().setCurrentCamera(camera);
 	}
 
 	public ArrayList<Object> getScriptVars() {

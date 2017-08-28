@@ -1,15 +1,14 @@
-package engine.editor;
+package game;
 
 import org.joml.Vector3f;
 
 import engine.entity.EntityBackground;
-import engine.entity.EntitySprite;
 import engine.entity.EntityTilemap;
 import engine.logic.Scene;
 import engine.logic.SceneManager;
 import engine.script.Script;
 
-public class Editor extends Scene {
+public class EditorScene extends Scene {
 
 	private Script editorScript;
 
@@ -17,31 +16,24 @@ public class Editor extends Scene {
 
 	private int cursorTileID = 0;
 
-	public Editor(SceneManager mgr) {
+	public EditorScene(SceneManager mgr) {
 		super(mgr);
 	}
 
-	private boolean b = false;
-
 	@Override
 	public void init() {
-
 		this.addEntity(new EntityBackground(new Vector3f(0, 0, 0)));
 		this.addEntity(world); // world is added from the SceneGame
 
 		editorScript = new Script("Editor.lua");
 		editorScript.execute("Init", this);
-		b = true;
-		// System.out.println("dbg");
 	}
 
 	@Override
 	public void update() {
 		super.update();
-		if (b) {
-			editorScript.refresh();
-			editorScript.execute("Run", this);
-		}
+		editorScript.refresh();
+		editorScript.execute("Run", this);
 	}
 
 	public EntityTilemap getWorld() {

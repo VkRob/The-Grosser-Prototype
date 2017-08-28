@@ -2,7 +2,7 @@ package engine.logic;
 
 import engine.input.Input;
 import engine.render.RenderCore;
-import game.SceneGame;
+import game.GameScene;
 
 public class SceneManager {
 
@@ -15,7 +15,7 @@ public class SceneManager {
 
 	public void init() {
 		renderCore = new RenderCore();
-		currentScene = new SceneGame(this);
+		currentScene = new GameScene(this);
 		Input.grabMouse();
 
 		currentScene.init();
