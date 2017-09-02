@@ -2,15 +2,18 @@ package engine.entity;
 
 import java.util.ArrayList;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joml.Vector2f;
 
 import engine.render.TextureAtlas;
 import engine.script.Script;
 import engine.tile.Tile;
 import engine.tile.TileVoid;
-import engine.util.Log;
 
 public class EntityTilemap extends Entity {
+
+	private static final Logger LOG = LogManager.getLogger(EntityTilemap.class);
 
 	private Script script;
 
@@ -58,7 +61,7 @@ public class EntityTilemap extends Entity {
 				return e;
 			}
 		}
-		Log.log("Failed to find TileEntity at position: " + position);
+		LOG.warn("Failed to find TileEntity at position: " + position);
 		return null;
 	}
 

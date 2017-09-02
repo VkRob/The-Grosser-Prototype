@@ -1,10 +1,12 @@
 package engine.tile;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joml.Vector2f;
 
-import engine.util.Log;
-
 public abstract class Tile {
+
+    private static final Logger LOG = LogManager.getLogger(Tile.class);
 
 	private static final int numOfTiles = 256;
 	private static Tile[] registry;
@@ -28,7 +30,7 @@ public abstract class Tile {
 				return i;
 			}
 		}
-		Log.error("Tile ID not found: " + tile.getClass().getName());
+		LOG.error("Error getting tile ID", new RuntimeException("Tile ID not found: " + tile.getClass().getName()));
 		return -1;
 	}
 
@@ -42,7 +44,7 @@ public abstract class Tile {
 				return id;
 			}
 		}
-		Log.error("Can not find tile named: " + name);
+		LOG.error("Error getting tile by name", new RuntimeException("Cannot find tile named " + name));
 		return -1;
 	}
 

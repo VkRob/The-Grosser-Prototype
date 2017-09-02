@@ -4,6 +4,8 @@ import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
 import static org.lwjgl.opengl.GL11.glDrawElements;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joml.Vector2f;
 
 import engine.Engine;
@@ -13,9 +15,10 @@ import engine.entity.EntityBackground;
 import engine.entity.EntitySprite;
 import engine.entity.EntityTilemap;
 import engine.logic.Scene;
-import engine.util.Log;
 
 public class RenderCore {
+
+	private static final Logger LOG = LogManager.getLogger(RenderCore.class);
 
 	private RenderGL renderGL;
 
@@ -24,7 +27,7 @@ public class RenderCore {
 	}
 
 	public void deinit() {
-		Log.log("deinit");
+		LOG.trace("deinit");
 		renderGL.deinit();
 	}
 
@@ -81,7 +84,7 @@ public class RenderCore {
 				renderGuiElement((EntitySprite) e);
 				break;
 			default:
-				Log.error("Entity: " + String.valueOf(e) + " does not have a valid Entity Type.");
+				LOG.error("Entity: " + String.valueOf(e) + " does not have a valid Entity Type.", new RuntimeException("Entity: " + String.valueOf(e) + " does not have a valid Entity Type."));
 				break;
 			}
 

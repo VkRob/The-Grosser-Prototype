@@ -1,24 +1,28 @@
 package engine;
 
-import static engine.util.Log.important;
-import static engine.util.Log.setLogMode;
-import static engine.util.Log.stringArrayToString;
-
 import engine.logic.SceneManager;
-import engine.util.LogMode;
+import engine.util.CustomConfigurationFactory;
 import engine.window.WindowManager;
 import engine.window.WindowParams;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.config.ConfigurationFactory;
+
+import static java.lang.String.join;
 
 public class Engine {
 
 	public static SceneManager sceneManager;
 
-	public static void main(String[] args) {
-		// Setup debugging mode
-		setLogMode(LogMode.RELEASE);
+	static {
+        ConfigurationFactory.setConfigurationFactory(new CustomConfigurationFactory());
+    }
 
+	private static Logger LOG = LogManager.getLogger(Engine.class);
+
+	public static void main(String[] args) {
 		// Log that the program has started
-		important("EngineTest.main called with arguments: " + stringArrayToString(args, ","));
+		LOG.debug("EngineTest.main called with arguments: " + join(",", args));
 
 		// Create SceneManager
 		sceneManager = new SceneManager();
