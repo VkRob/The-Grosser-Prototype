@@ -7,7 +7,6 @@ import static org.lwjgl.opengl.GL11.glClearColor;
 import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.GL_DYNAMIC_DRAW;
 import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
 import static org.lwjgl.opengl.GL15.glBindBuffer;
 import static org.lwjgl.opengl.GL15.glBufferData;
 import static org.lwjgl.opengl.GL15.glDeleteBuffers;
@@ -19,9 +18,7 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-import engine.entity.EntityMachine;
 import engine.entity.EntitySprite;
-import engine.render.shader.Shader;
 import engine.render.shader.SpriteShader;
 import engine.render.shader.TilemapShader;
 

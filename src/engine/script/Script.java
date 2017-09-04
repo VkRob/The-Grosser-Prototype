@@ -8,9 +8,6 @@ import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.luaj.vm2.lib.jse.JsePlatform;
 
-import engine.render.RenderCore;
-import sun.rmi.runtime.Log;
-
 public class Script {
 
 	public static ArrayList<Object> getNewArrayList() {

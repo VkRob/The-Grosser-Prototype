@@ -16,7 +16,6 @@ import engine.entity.EntityMachine;
 import engine.entity.EntitySprite;
 import engine.entity.EntityTilemap;
 import engine.logic.Scene;
-import sun.rmi.runtime.Log;
 
 public class RenderCore {
 

@@ -6,11 +6,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joml.Vector2f;
 
-import engine.render.RenderCore;
 import engine.render.TextureAtlas;
 import engine.script.Script;
 import engine.tile.TileVoid;
-import sun.rmi.runtime.Log;
 
 public class EntityTilemap extends Entity {
 
@@ -60,6 +58,21 @@ public class EntityTilemap extends Entity {
 			}
 		}
 		LOG.warn("Failed to find TileEntity at position: " + position);
+		return null;
+	}
+
+	/*
+	 * Only use this method if you specifially never want to get debug warnings
+	 * of it being null. This is useful if you intentionally are checking if a
+	 * tile exists (for instance when deciding if a chunk has been loaded or
+	 * not)
+	 */
+	public TileEntity getTileAtPosNoWarn(Vector2f position) {
+		for (TileEntity e : tiles) {
+			if (e.getPosition().equals(position)) {
+				return e;
+			}
+		}
 		return null;
 	}
 
@@ -215,22 +228,13 @@ public class EntityTilemap extends Entity {
 				list.add(getChunkLocalPos(new Vector2f(x, y)));
 			}
 		}
-
-		// list.add(getChunkLocalPos(new Vector2f(0, 0)));
-		// list.add(getChunkLocalPos(new Vector2f(1, 0)));
-		// list.add(getChunkLocalPos(new Vector2f(2, 0)));
-		// list.add(getChunkLocalPos(new Vector2f(0, 1)));
-		// list.add(getChunkLocalPos(new Vector2f(1, 1)));
-		// list.add(getChunkLocalPos(new Vector2f(-1, 1)));
-		// list.add(getChunkLocalPos(new Vector2f(0, -1)));
-		// list.add(getChunkLocalPos(new Vector2f(1, -1)));
 		return list;
 	}
 
 	@Override
 	public void update() {
 		for (Vector2f v : getVisibleChunks()) {
-			if (getTileAtPos(v) == null) {
+			if (getTileAtPosNoWarn(v) == null) {
 				script.execute("GenerateChunk", this, v);
 			}
 		}
@@ -260,5 +264,4 @@ public class EntityTilemap extends Entity {
 	public void setChunks(ArrayList<Vector2f> chunks) {
 		this.chunks = chunks;
 	}
-
 }

@@ -56,8 +56,6 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
 
-import sun.rmi.runtime.Log;
-
 public class Shader {
 
 	private static Object shader = new Object();

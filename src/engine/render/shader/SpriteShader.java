@@ -5,7 +5,6 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-import engine.entity.Entity;
 import engine.entity.EntitySprite;
 import engine.window.WindowManager;
 

@@ -115,7 +115,7 @@ function Run(hEditor)
     mouseWorldPos.y = round(mouseWorldPos.y/40)*40;
 
     local cursorTilePos = new_Vector2f(mouseWorldPos.x / 40, mouseWorldPos.y / 40);
-    local tileAtPos = hEditor:getWorld():getTileAtPos(cursorTilePos);
+    local tileAtPos = hEditor:getWorld():getTileAtPosNoWarn(cursorTilePos);
 
     gui.cursor:setType(Entity.TYPE_GUI);
     gui.cursor:setPosition(new_Vector2f(-100,-100));
