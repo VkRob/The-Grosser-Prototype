@@ -1,5 +1,7 @@
 package engine.tile;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joml.Vector2f;
 
 import engine.logic.Registry;
@@ -7,6 +9,8 @@ import engine.logic.Registry;
 public abstract class Tile {
 
 	private static Registry registry = new Registry();
+
+	private static final Logger LOG = LogManager.getLogger(Tile.class);
 
 	public static void registerTiles() {
 		registerTile(0, "void", new TileVoid());

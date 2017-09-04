@@ -4,17 +4,19 @@ import java.util.ArrayList;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+//github.com/VkRob/The-Grosser-Prototype.git
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.luaj.vm2.lib.jse.JsePlatform;
 
 public class Script {
 
+	private static final Logger LOG = LogManager.getLogger(Script.class);
+
 	public static ArrayList<Object> getNewArrayList() {
 		return new ArrayList<Object>();
 	}
 
-	private static Logger LOG = LogManager.getLogger(Script.class);
 	private static final String scriptFolder = "./script/";
 
 	private LuaValue luaGlobals;
@@ -51,7 +53,7 @@ public class Script {
 		if (!luaFunction.isnil()) {
 			luaFunction.call(loadToLua(arg));
 		} else {
-			LOG.error("Lua Function not found");
+			LOG.error("Error executing Lua function " + functionName, new RuntimeException("Lua Function not found"));
 		}
 	}
 
@@ -60,7 +62,7 @@ public class Script {
 		if (!luaFunction.isnil()) {
 			luaFunction.call();
 		} else {
-			LOG.error("Lua Function not found");
+			LOG.error("Error executing Lua function " + functionName, new RuntimeException("Lua Function not found"));
 		}
 	}
 
@@ -69,7 +71,7 @@ public class Script {
 		if (!luaFunction.isnil()) {
 			luaFunction.call(loadToLua(arg), loadToLua(arg2));
 		} else {
-			LOG.error("Lua Function not found");
+			LOG.error("Error executing Lua function " + functionName, new RuntimeException("Lua Function not found"));
 		}
 	}
 }

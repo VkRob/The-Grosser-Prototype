@@ -19,7 +19,7 @@ import engine.logic.Scene;
 
 public class RenderCore {
 
-	private static Logger LOG = LogManager.getLogger(RenderCore.class);
+	private static final Logger LOG = LogManager.getLogger(RenderCore.class);
 
 	private RenderGL renderGL;
 
@@ -29,6 +29,7 @@ public class RenderCore {
 
 	public void deinit() {
 		LOG.debug("deinit render core");
+
 		renderGL.deinit();
 	}
 
@@ -102,6 +103,7 @@ public class RenderCore {
 				break;
 			default:
 				LOG.error("Entity: " + String.valueOf(e) + " does not have a valid Entity Type.");
+
 				break;
 			}
 

@@ -12,6 +12,8 @@ import engine.tile.TileVoid;
 
 public class EntityTilemap extends Entity {
 
+	private static final Logger LOG = LogManager.getLogger(EntityTilemap.class);
+
 	private Script script;
 
 	private Vector2f position;
@@ -27,8 +29,6 @@ public class EntityTilemap extends Entity {
 	private int[] elements;
 
 	private int chunkSize = 10;
-
-	private static Logger LOG = LogManager.getLogger(EntityTilemap.class);
 
 	public EntityTilemap() {
 		super(Entity.TYPE_TILEMAP);
@@ -73,6 +73,7 @@ public class EntityTilemap extends Entity {
 				return e;
 			}
 		}
+
 		return null;
 	}
 

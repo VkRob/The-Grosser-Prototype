@@ -58,6 +58,8 @@ import org.lwjgl.BufferUtils;
 
 public class Shader {
 
+	private static final Logger LOG = LogManager.getLogger(Shader.class);
+
 	private static Object shader = new Object();
 
 	/**
@@ -67,7 +69,6 @@ public class Shader {
 	 *            to the file
 	 * @return The file as a String, lines seperated by "\n"
 	 */
-	private static Logger LOG = LogManager.getLogger(Shader.class);
 
 	public static String loadFile(String path) {
 		String out = "";
@@ -102,7 +103,7 @@ public class Shader {
 		int status = glGetShaderi(vertexShader, GL_COMPILE_STATUS);
 		if (status == GL_FALSE) {
 			String err = glGetShaderInfoLog(vertexShader);
-			LOG.error("Vertex Shader failed: " + err);
+			LOG.error("Vertex Shader failed: " + err, new RuntimeException(err));
 		}
 
 		fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -111,7 +112,7 @@ public class Shader {
 		status = glGetShaderi(fragmentShader, GL_COMPILE_STATUS);
 		if (status == GL_FALSE) {
 			String err = glGetShaderInfoLog(fragmentShader);
-			LOG.error("Fragment Shader failed: " + err);
+			LOG.error("Fragment Shader failed: " + err, new RuntimeException(err));
 		}
 
 		shaderProgram = glCreateProgram();
