@@ -1,9 +1,13 @@
-package engine.render.shader;
+package engine.render.shader.modules;
 
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
+import engine.render.shader.Shader;
+import engine.render.shader.ShaderAttrib;
+import engine.render.shader.ShaderUniform;
+import engine.render.shader.Texture;
 import engine.window.WindowManager;
 
 public class TilemapShader {

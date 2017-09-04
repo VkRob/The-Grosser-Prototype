@@ -5,6 +5,7 @@ import org.joml.Vector2f;
 import engine.logic.Registry;
 
 public class Machine {
+	
 	public static Registry REGISTRY = new Registry();
 
 	public static void registerMachines() {
@@ -31,4 +32,5 @@ public class Machine {
 	public Vector2f getTextureCoords() {
 		return textureCoords;
 	}
+	
 }

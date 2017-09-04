@@ -72,5 +72,4 @@ public class Script {
 			LOG.error("Lua Function not found");
 		}
 	}
-
 }

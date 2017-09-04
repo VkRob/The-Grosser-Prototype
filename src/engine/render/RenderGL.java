@@ -19,8 +19,9 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import engine.entity.EntitySprite;
-import engine.render.shader.SpriteShader;
-import engine.render.shader.TilemapShader;
+import engine.render.shader.modules.MachineShader;
+import engine.render.shader.modules.SpriteShader;
+import engine.render.shader.modules.TilemapShader;
 
 public class RenderGL {
 
@@ -43,10 +44,9 @@ public class RenderGL {
 
 	private TilemapShader tileMapShader;
 	private SpriteShader spriteShader;
+	private MachineShader machineShader;
 
 	public RenderGL() {
-
-		spriteShader = new SpriteShader();
 		tileMapShader = new TilemapShader();
 
 		initTileVAO();// Model Container
@@ -59,6 +59,7 @@ public class RenderGL {
 		initQuadEBO();// Model Elements
 		initQuadShader();
 
+		machineShader = new MachineShader();
 	}
 
 	public void updateQuadVBO(Vector2f dimensions) {
@@ -99,7 +100,7 @@ public class RenderGL {
 	}
 
 	private void initQuadShader() {
-		spriteShader.init();
+		spriteShader = new SpriteShader();
 	}
 
 	private void initQuadEBO() {
@@ -131,6 +132,11 @@ public class RenderGL {
 	public void bindTiles() {
 		glBindVertexArray(tileMapVao);
 		tileMapShader.use();
+	}
+
+	public void bindMachineShader() {
+		glBindVertexArray(quadVao);
+		machineShader.use();
 	}
 
 	private void initTileEBO() {

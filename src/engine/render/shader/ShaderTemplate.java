@@ -8,45 +8,44 @@ import org.joml.Vector4f;
 import engine.entity.EntitySprite;
 import engine.window.WindowManager;
 
-public class SpriteShader {
+public class ShaderTemplate {
+
 	private Shader shader;
+	public ShaderUniform uniEntityPosition;
+	public ShaderUniform uniCameraPosition;
+	public ShaderUniform uniScaling;
+	public ShaderUniform uniProj;
+	public ShaderUniform uniModel;
+	public ShaderUniform uniTexCoords;
+	public ShaderUniform uniTint;
+	public ShaderUniform uniUsesTexture;
 
-	private ShaderUniform uniQEntityPosition;
-	private ShaderUniform uniQCameraPosition;
-	private ShaderUniform uniQScaling;
-	private ShaderUniform uniQProj;
-	private ShaderUniform uniQModel;
-	private ShaderUniform uniTexCoords;
-	private ShaderUniform uniTint;
-	private ShaderUniform uniUsesTexture;
+	private void loadEntityPosition() {
+		uniEntityPosition = ShaderHelper.createShaderUniform(shader, "entityPos");
+		shader.loadUniformVector2f(uniEntityPosition, new Vector2f(0, 0));
+	}
 
-	public void init() {
-		shader = new Shader(Shader.loadFile("/shader/sprite/vertex.glsl"),
-				Shader.loadFile("/shader/sprite/fragment.glsl"));
-		shader.addAttrib(new ShaderAttrib("position", 2));
-		shader.addAttrib(new ShaderAttrib("texcoord", 2));
-		shader.pushAttribs();
+	private void loadCameraPosition() {
+		uniCameraPosition = ShaderHelper.createShaderUniform(shader, "cameraPos");
+		shader.loadUniformVector2f(uniCameraPosition, new Vector2f(0, 0));
+	}
 
-		uniQEntityPosition = new ShaderUniform("entityPos");
-		shader.createUniform(uniQEntityPosition);
-		shader.loadUniformVector2f(uniQEntityPosition, new Vector2f(0, 0));
+	private void loadScaling() {
+		uniScaling = ShaderHelper.createShaderUniform(shader, "scaling");
+		shader.loadUniformFloat(uniScaling, 0.1f);
+	}
 
-		uniQCameraPosition = new ShaderUniform("cameraPos");
-		shader.createUniform(uniQCameraPosition);
-		shader.loadUniformVector2f(uniQCameraPosition, new Vector2f(0, 0));
-
-		uniQScaling = new ShaderUniform("scaling");
-		shader.createUniform(uniQScaling);
-		shader.loadUniformFloat(uniQScaling, 0.1f);
-
-		uniTint = new ShaderUniform("tint");
-		shader.createUniform(uniTint);
+	private void loadTint() {
+		uniTint = ShaderHelper.createShaderUniform(shader, "tint");
 		shader.loadUniformVector3f(uniTint, new Vector3f(1, 1, 1));
+	}
 
-		uniUsesTexture = new ShaderUniform("usesTexture");
-		shader.createUniform(uniUsesTexture);
+	private void loadUsesTexture() {
+		uniUsesTexture = ShaderHelper.createShaderUniform(shader, "usesTexture");
 		shader.loadUniformBool(uniUsesTexture, true);
+	}
 
+	private void loadModelMatrix() {
 		Vector2f size = new Vector2f(200.0f, 200.0f);
 
 		Matrix4f modelMat = new Matrix4f();
@@ -60,29 +59,50 @@ public class SpriteShader {
 
 		modelMat = modelMat.scale(new Vector3f(size, 1.0f));
 
-		uniQModel = new ShaderUniform("model");
-		shader.createUniform(uniQModel);
-		shader.loadUniformMatrix4f(uniQModel, modelMat);
+		uniModel = new ShaderUniform("model");
+		shader.createUniform(uniModel);
+		shader.loadUniformMatrix4f(uniModel, modelMat);
+	}
 
+	private void loadProjectionMatrix() {
 		Matrix4f p = new Matrix4f();
 		p.identity();
 
 		int width = WindowManager.getParams().getWidth();
 		int height = WindowManager.getParams().getHeight();
 
-		uniQProj = new ShaderUniform("proj");
-		shader.createUniform(uniQProj);
-		shader.loadUniformMatrix4f(uniQProj, p.ortho(0.0f, (float) width, 0.0f, (float) height, -1.0f, 1.0f));
+		uniProj = new ShaderUniform("proj");
+		shader.createUniform(uniProj);
+		shader.loadUniformMatrix4f(uniProj, p.ortho(0.0f, (float) width, 0.0f, (float) height, -1.0f, 1.0f));
+	}
 
+	private void loadTextureCoords() {
 		uniTexCoords = new ShaderUniform("i_textureCoords");
 		shader.createUniform(uniTexCoords);
 		shader.loadUniformVector4f(uniTexCoords, new Vector4f(0, 0, 16, 16));
-
-		shader.loadTexture(Texture.loadTexture("/texture/test2.png"));
 	}
 
-	public void use() {
-		shader.use();
+	private void loadTexture(String path) {
+		shader.loadTexture(Texture.loadTexture(path));
+	}
+
+	private void create() {
+		loadEntityPosition();
+		loadCameraPosition();
+		loadScaling();
+		loadTint();
+		loadUsesTexture();
+		loadModelMatrix();
+		loadProjectionMatrix();
+		loadTextureCoords();
+	}
+
+	public ShaderTemplate(Shader shader, String texturePath) {
+
+		this.shader = shader;
+
+		create();
+		loadTexture(texturePath);
 	}
 
 	public void loadUniformsToShader(Vector2f texCoords, Vector2f entityPosition, Vector2f cameraPosition) {
@@ -101,14 +121,9 @@ public class SpriteShader {
 
 		modelMat = modelMat.scale(new Vector3f(size, 1.0f));
 
-		shader.loadUniformMatrix4f(uniQModel, modelMat);
+		shader.loadUniformMatrix4f(uniModel, modelMat);
 
 		shader.loadUniformVector4f(uniTexCoords, new Vector4f(texCoords.x, texCoords.y, 16, 16));
-
-	}
-
-	public Shader getShader() {
-		return shader;
 	}
 
 	public void loadEntityMetaDataUniforms(EntitySprite e) {
@@ -122,4 +137,5 @@ public class SpriteShader {
 		shader.loadUniformVector3f(uniTint, new Vector3f(1, 1, 1));
 		shader.loadUniformBool(uniUsesTexture, true);
 	}
+
 }

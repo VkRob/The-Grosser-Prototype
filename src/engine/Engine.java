@@ -13,7 +13,7 @@ import game.Grosser;
 public class Engine {
 
 	public static SceneManager sceneManager;
-	public static WindowParams windowParams = new WindowParams("grosser", 800, 600);
+	public static WindowParams windowParams = new WindowParams("The Grosser Project", 800, 600);
 
 	static {
 		ConfigurationFactory.setConfigurationFactory(new CustomConfigurationFactory());
@@ -23,13 +23,16 @@ public class Engine {
 
 	public static void main(String[] args) {
 
-		// Log that the program has started
-		LOG.debug("EngineTest.main called with arguments: " + String.join(",", args));
+		if (args.length == 0) {
+			LOG.debug("Engine.main called with no arguments.");
+		} else {
+			LOG.debug("Engine.main called with arguments: " + String.join(",", args));
+		}
 
 		// Create SceneManager
 		sceneManager = new SceneManager();
 
-		// Register the Game
+		// Register the Tile Types, Machine Types, etc
 		Grosser.registerGame();
 
 		// Create the Window
