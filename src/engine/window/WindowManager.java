@@ -1,13 +1,37 @@
 package engine.window;
 
-import static engine.util.Log.log;
-import static org.lwjgl.glfw.Callbacks.*;
-import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
+import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
+import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
+import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
+import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
+import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
+import static org.lwjgl.glfw.GLFW.glfwDefaultWindowHints;
+import static org.lwjgl.glfw.GLFW.glfwDestroyWindow;
+import static org.lwjgl.glfw.GLFW.glfwGetPrimaryMonitor;
+import static org.lwjgl.glfw.GLFW.glfwGetVideoMode;
+import static org.lwjgl.glfw.GLFW.glfwGetWindowSize;
+import static org.lwjgl.glfw.GLFW.glfwInit;
+import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
+import static org.lwjgl.glfw.GLFW.glfwPollEvents;
+import static org.lwjgl.glfw.GLFW.glfwSetErrorCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowPos;
+import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
+import static org.lwjgl.glfw.GLFW.glfwShowWindow;
+import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
+import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
+import static org.lwjgl.glfw.GLFW.glfwTerminate;
+import static org.lwjgl.glfw.GLFW.glfwWindowHint;
+import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 import java.nio.IntBuffer;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -15,7 +39,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
 import engine.logic.SceneManager;
-import engine.util.Log;
+import engine.render.RenderCore;
 
 public class WindowManager {
 
@@ -29,14 +53,16 @@ public class WindowManager {
 
 	public static long windowID;
 
+	private static Logger LOG = LogManager.getLogger(RenderCore.class);
+
 	public WindowManager(WindowParams params, SceneManager sceneManager) {
-		log("WindowManager() running on " + Version.getVersion());
+		LOG.debug("WindowManager() running on " + Version.getVersion());
 		this.sceneManager = sceneManager;
 		WindowManager.params = params;
 	}
 
 	public void construct() {
-		log("Construct Window");
+		LOG.debug("Construct Window");
 		// Setup an error callback. The default implementation
 		// will print the error message in System.err.
 		GLFWErrorCallback.createPrint(System.err).set();
@@ -90,7 +116,7 @@ public class WindowManager {
 	}
 
 	public void deconstruct() {
-		log("Deconstruct Window");
+		LOG.debug("Deconstruct Window");
 		// Free the window callbacks and destroy the window
 		glfwFreeCallbacks(windowID);
 		glfwDestroyWindow(windowID);
@@ -114,7 +140,7 @@ public class WindowManager {
 		// Run the rendering loop until the user has attempted to close
 		// the window or has pressed the ESCAPE key.
 
-		Log.important("Begun Loop");
+		LOG.debug("Begun Loop");
 		while (!glfwWindowShouldClose(windowID)) {
 			// glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the
 			// framebuffer

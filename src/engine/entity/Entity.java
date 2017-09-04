@@ -1,7 +1,5 @@
 package engine.entity;
 
-import org.joml.Vector3f;
-
 import engine.logic.Scene;
 
 public abstract class Entity {
@@ -10,6 +8,7 @@ public abstract class Entity {
 	public static final int TYPE_TILEMAP = 1;
 	public static final int TYPE_SPRITE = 2;
 	public static final int TYPE_GUI = 3;
+	public static final int TYPE_MACHINE = 4;
 
 	private int type;
 

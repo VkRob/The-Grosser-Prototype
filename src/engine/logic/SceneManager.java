@@ -9,21 +9,25 @@ public class SceneManager {
 	private Scene currentScene;
 	private RenderCore renderCore;
 
+	public static GameScene gameScene;
+
 	public SceneManager() {
 
 	}
 
 	public void init() {
 		renderCore = new RenderCore();
-		currentScene = new GameScene(this);
+		gameScene = new GameScene(this);
+		currentScene = gameScene;
 		Input.grabMouse();
 
 		currentScene.init();
 	}
 
 	public void update() {
+		Input.updateEarly();
 		currentScene.update();
-		Input.update(); // Set pressed this frame and released this frame
+		Input.updateLate(); // Set pressed this frame and released this frame
 						// to false
 	}
 

@@ -69,4 +69,8 @@ public abstract class Scene {
 	public void setScriptVars(ArrayList<Object> scriptVars) {
 		this.scriptVars = scriptVars;
 	}
+
+	public SceneManager getMgr() {
+		return mgr;
+	}
 }

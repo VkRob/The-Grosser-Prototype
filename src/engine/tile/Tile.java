@@ -2,15 +2,13 @@ package engine.tile;
 
 import org.joml.Vector2f;
 
-import engine.util.Log;
+import engine.logic.Registry;
 
 public abstract class Tile {
 
-	private static final int numOfTiles = 256;
-	private static Tile[] registry;
+	private static Registry registry = new Registry();
 
 	public static void registerTiles() {
-		registry = new Tile[numOfTiles];
 		registerTile(0, "void", new TileVoid());
 		registerTile(1, "grass", new TileNormal(new Vector2f(0, 0)));
 		registerTile(2, "stone", new TileNormal(new Vector2f(1, 0)));
@@ -19,31 +17,19 @@ public abstract class Tile {
 	private static void registerTile(int id, String string, Tile tile) {
 		tile.setId(id);
 		tile.setName(string);
-		registry[id] = tile;
+		registry.add(id, string, tile);
 	}
 
 	public static int getTileID(Tile tile) {
-		for (int i = 0; i < registry.length; i++) {
-			if (tile.getClass().equals(registry[i].getClass())) {
-				return i;
-			}
-		}
-		Log.error("Tile ID not found: " + tile.getClass().getName());
-		return -1;
+		return registry.getIdOfObj(tile);
 	}
 
 	public static Tile getTile(int id) {
-		return registry[id];
+		return (Tile) registry.getObjByID(id);
 	}
 
 	public static int getTileID(String name) {
-		for (int id = 0; id < registry.length; id++) {
-			if (registry[id].name.equals(name)) {
-				return id;
-			}
-		}
-		Log.error("Can not find tile named: " + name);
-		return -1;
+		return registry.getIdByName(name);
 	}
 
 	private int id;

@@ -116,6 +116,11 @@ public class SpriteShader {
 		shader.use();
 		shader.loadUniformVector3f(uniTint, e.getTint());
 		shader.loadUniformBool(uniUsesTexture, e.isUsesTexture());
-		// shader.stop();
+	}
+
+	public void loadMachineMetaDataUniforms() {
+		shader.use();
+		shader.loadUniformVector3f(uniTint, new Vector3f(1, 1, 1));
+		shader.loadUniformBool(uniUsesTexture, true);
 	}
 }

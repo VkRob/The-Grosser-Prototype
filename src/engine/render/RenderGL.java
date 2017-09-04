@@ -19,6 +19,7 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
+import engine.entity.EntityMachine;
 import engine.entity.EntitySprite;
 import engine.render.shader.Shader;
 import engine.render.shader.SpriteShader;
@@ -191,5 +192,9 @@ public class RenderGL {
 
 	public void loadSpriteMetaDataUniforms(EntitySprite sprite) {
 		spriteShader.loadEntityMetaDataUniforms(sprite);
+	}
+
+	public void loadMachineMetaDataUniforms() {
+		spriteShader.loadMachineMetaDataUniforms();
 	}
 }

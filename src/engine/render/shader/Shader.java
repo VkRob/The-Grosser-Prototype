@@ -32,10 +32,10 @@ import static org.lwjgl.opengl.GL20.glGetUniformLocation;
 import static org.lwjgl.opengl.GL20.glLinkProgram;
 import static org.lwjgl.opengl.GL20.glShaderSource;
 import static org.lwjgl.opengl.GL20.glUniform1f;
+import static org.lwjgl.opengl.GL20.glUniform1i;
 import static org.lwjgl.opengl.GL20.glUniform2f;
 import static org.lwjgl.opengl.GL20.glUniform3f;
 import static org.lwjgl.opengl.GL20.glUniform4f;
-import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
 import static org.lwjgl.opengl.GL20.glUseProgram;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
@@ -48,13 +48,15 @@ import java.io.InputStreamReader;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
 
-import engine.util.Log;
+import sun.rmi.runtime.Log;
 
 public class Shader {
 
@@ -67,6 +69,8 @@ public class Shader {
 	 *            to the file
 	 * @return The file as a String, lines seperated by "\n"
 	 */
+	private static Logger LOG = LogManager.getLogger(Shader.class);
+
 	public static String loadFile(String path) {
 		String out = "";
 		try {
@@ -100,7 +104,7 @@ public class Shader {
 		int status = glGetShaderi(vertexShader, GL_COMPILE_STATUS);
 		if (status == GL_FALSE) {
 			String err = glGetShaderInfoLog(vertexShader);
-			Log.error("Vertex Shader failed: " + err);
+			LOG.error("Vertex Shader failed: " + err);
 		}
 
 		fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -109,7 +113,7 @@ public class Shader {
 		status = glGetShaderi(fragmentShader, GL_COMPILE_STATUS);
 		if (status == GL_FALSE) {
 			String err = glGetShaderInfoLog(fragmentShader);
-			Log.error("Fragment Shader failed: " + err);
+			LOG.error("Fragment Shader failed: " + err);
 		}
 
 		shaderProgram = glCreateProgram();

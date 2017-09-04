@@ -32,7 +32,7 @@ public class EditorScene extends Scene {
 	@Override
 	public void update() {
 		super.update();
-		editorScript.refresh();
+		//editorScript.refresh();
 		editorScript.execute("Run", this);
 	}
 

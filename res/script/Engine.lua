@@ -14,6 +14,9 @@ function createVar(my_scene, obj)
   return getVar(my_scene, addVar(my_scene, obj));
 end
 
+--Window Dimensions, etc
+Window_Params = luajava.bindClass("engine.Engine").windowParams;
+
 --Java Native Lib
 function new_ArrayList()
   return luajava.bindClass("engine.script.Script"):getNewArrayList();
@@ -60,6 +63,9 @@ Input = {
   end,
   isLeftClick = function()
     return luajava.bindClass("engine.input.Input"):isLeftClickDown();
+  end,
+  isLeftTap = function()
+    return luajava.bindClass("engine.input.Input"):didLeftClick();
   end,
   getMouseWorldPos = function(camera)
     return luajava.bindClass("engine.input.Input"):getMouseWorldPosition(camera);

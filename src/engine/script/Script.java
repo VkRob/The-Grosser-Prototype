@@ -2,12 +2,14 @@ package engine.script;
 
 import java.util.ArrayList;
 
-import org.joml.Vector2f;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.luaj.vm2.lib.jse.JsePlatform;
 
-import engine.util.Log;
+import engine.render.RenderCore;
+import sun.rmi.runtime.Log;
 
 public class Script {
 
@@ -15,6 +17,7 @@ public class Script {
 		return new ArrayList<Object>();
 	}
 
+	private static Logger LOG = LogManager.getLogger(Script.class);
 	private static final String scriptFolder = "./script/";
 
 	private LuaValue luaGlobals;
@@ -51,7 +54,7 @@ public class Script {
 		if (!luaFunction.isnil()) {
 			luaFunction.call(loadToLua(arg));
 		} else {
-			Log.error("Lua Function not found");
+			LOG.error("Lua Function not found");
 		}
 	}
 
@@ -60,7 +63,7 @@ public class Script {
 		if (!luaFunction.isnil()) {
 			luaFunction.call();
 		} else {
-			Log.error("Lua Function not found");
+			LOG.error("Lua Function not found");
 		}
 	}
 
@@ -69,7 +72,7 @@ public class Script {
 		if (!luaFunction.isnil()) {
 			luaFunction.call(loadToLua(arg), loadToLua(arg2));
 		} else {
-			Log.error("Lua Function not found");
+			LOG.error("Lua Function not found");
 		}
 	}
 

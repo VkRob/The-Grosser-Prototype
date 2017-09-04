@@ -93,18 +93,51 @@ public class Input {
 		return new Vector2f((float) xBuffer.get(0), (float) (-yBuffer.get(0)) + (WindowManager.params.getHeight()));
 	}
 
+	private static boolean disableClickUntilRelease = false;
+	private static boolean disableHoldUntilRelease = false;
+
+	public static void disableHoldUntilRelease() {
+		disableHoldUntilRelease = true;
+	}
+
 	public static boolean isLeftClickDown() {
-		return 1 == glfwGetMouseButton(WindowManager.windowID, GLFW_MOUSE_BUTTON_1);
+		if (disableHoldUntilRelease) {
+			return false;
+		} else {
+
+			return 1 == glfwGetMouseButton(WindowManager.windowID, GLFW_MOUSE_BUTTON_1);
+		}
+	}
+
+	public static boolean didLeftClick() {
+		if (disableClickUntilRelease) {
+			return false;
+		} else {
+			boolean val = 1 == glfwGetMouseButton(WindowManager.windowID, GLFW_MOUSE_BUTTON_1);
+			if (val) {
+				disableClickUntilRelease = true;
+			}
+			return val;
+		}
 	}
 
 	public static Vector2f getMouseWorldPosition(Camera camera) {
 		return getMouseScreenPosition().add(new Vector2f(camera.getPosition()));
 	}
 
-	public static void update() {
+	public static void updateLate() {
 		for (Key k : keys) {
 			k.setPressedThisFrame(false);
 			k.setReleasedThisFrame(false);
+		}
+	}
+
+	public static void updateEarly() {
+		if (disableHoldUntilRelease && !(1 == glfwGetMouseButton(WindowManager.windowID, GLFW_MOUSE_BUTTON_1))) {
+			disableHoldUntilRelease = false;
+		}
+		if (disableClickUntilRelease && !(1 == glfwGetMouseButton(WindowManager.windowID, GLFW_MOUSE_BUTTON_1))) {
+			disableClickUntilRelease = false;
 		}
 	}
 

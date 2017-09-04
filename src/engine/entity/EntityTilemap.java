@@ -2,13 +2,15 @@ package engine.entity;
 
 import java.util.ArrayList;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joml.Vector2f;
 
+import engine.render.RenderCore;
 import engine.render.TextureAtlas;
 import engine.script.Script;
-import engine.tile.Tile;
 import engine.tile.TileVoid;
-import engine.util.Log;
+import sun.rmi.runtime.Log;
 
 public class EntityTilemap extends Entity {
 
@@ -28,11 +30,10 @@ public class EntityTilemap extends Entity {
 
 	private int chunkSize = 10;
 
+	private static Logger LOG = LogManager.getLogger(EntityTilemap.class);
+
 	public EntityTilemap() {
 		super(Entity.TYPE_TILEMAP);
-
-		/* TODO: MOVE REGISTER METHOD TO MAIN */
-		Tile.registerTiles();
 
 		position = new Vector2f(0, 0);
 
@@ -58,7 +59,7 @@ public class EntityTilemap extends Entity {
 				return e;
 			}
 		}
-		Log.log("Failed to find TileEntity at position: " + position);
+		LOG.warn("Failed to find TileEntity at position: " + position);
 		return null;
 	}
 

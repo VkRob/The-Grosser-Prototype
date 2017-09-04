@@ -1,30 +1,36 @@
 package engine;
 
-import static engine.util.Log.important;
-import static engine.util.Log.setLogMode;
-import static engine.util.Log.stringArrayToString;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.config.ConfigurationFactory;
 
 import engine.logic.SceneManager;
-import engine.util.LogMode;
+import engine.util.CustomConfigurationFactory;
 import engine.window.WindowManager;
 import engine.window.WindowParams;
+import game.Grosser;
 
 public class Engine {
 
 	public static SceneManager sceneManager;
+	public static WindowParams windowParams = new WindowParams("grosser", 800, 600);
+
+	static {
+		ConfigurationFactory.setConfigurationFactory(new CustomConfigurationFactory());
+	}
+
+	private static Logger LOG = LogManager.getLogger(Engine.class);
 
 	public static void main(String[] args) {
-		// Setup debugging mode
-		setLogMode(LogMode.RELEASE);
 
 		// Log that the program has started
-		important("EngineTest.main called with arguments: " + stringArrayToString(args, ","));
+		LOG.debug("EngineTest.main called with arguments: " + String.join(",", args));
 
 		// Create SceneManager
 		sceneManager = new SceneManager();
 
-		// Create the Window Params
-		WindowParams windowParams = new WindowParams("grosser", 800, 600);
+		// Register the Game
+		Grosser.registerGame();
 
 		// Create the Window
 		WindowManager window = new WindowManager(windowParams, sceneManager);
