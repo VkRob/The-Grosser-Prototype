@@ -9,7 +9,7 @@ public class SpriteShader extends ShaderModule {
 	private static final String TEXTURE = "/texture/test.png";
 
 	public SpriteShader() {
-		super(VERTEX, FRAGMENT, TEXTURE);
+		super(VERTEX, FRAGMENT, TEXTURE, 16, 16);
 	}
 
 }

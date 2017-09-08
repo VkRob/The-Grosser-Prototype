@@ -67,7 +67,7 @@ public class RenderCore {
 		// renderGL.loadSpriteMetaDataUniforms(machine);
 		// TODO ^^^
 		renderGL.loadMachineMetaDataUniforms();
-		renderGL.loadUniformsToSpriteShader(machine.getTexCoords(), machine.getPosition(),
+		renderGL.loadUniformsToMachineShader(machine.getTexCoords(), machine.getPosition(),
 				getCurrentCamera().getPosition());
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		renderGL.unbind();

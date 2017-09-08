@@ -10,6 +10,8 @@ import engine.window.WindowManager;
 
 public class ShaderTemplate {
 
+	private int textureWidth, textureHeight;
+
 	private Shader shader;
 	public ShaderUniform uniEntityPosition;
 	public ShaderUniform uniCameraPosition;
@@ -76,10 +78,10 @@ public class ShaderTemplate {
 		shader.loadUniformMatrix4f(uniProj, p.ortho(0.0f, (float) width, 0.0f, (float) height, -1.0f, 1.0f));
 	}
 
-	private void loadTextureCoords() {
+	private void loadTextureCoords(int width, int height) {
 		uniTexCoords = new ShaderUniform("i_textureCoords");
 		shader.createUniform(uniTexCoords);
-		shader.loadUniformVector4f(uniTexCoords, new Vector4f(0, 0, 16, 16));
+		shader.loadUniformVector4f(uniTexCoords, new Vector4f(0, 0, width, height));
 	}
 
 	private void loadTexture(String path) {
@@ -94,11 +96,12 @@ public class ShaderTemplate {
 		loadUsesTexture();
 		loadModelMatrix();
 		loadProjectionMatrix();
-		loadTextureCoords();
+		loadTextureCoords(16, 16);
 	}
 
-	public ShaderTemplate(Shader shader, String texturePath) {
-
+	public ShaderTemplate(Shader shader, String texturePath, int width, int height) {
+		this.textureWidth = width;
+		this.textureHeight = height;
 		this.shader = shader;
 
 		create();
@@ -123,7 +126,7 @@ public class ShaderTemplate {
 
 		shader.loadUniformMatrix4f(uniModel, modelMat);
 
-		shader.loadUniformVector4f(uniTexCoords, new Vector4f(texCoords.x, texCoords.y, 16, 16));
+		shader.loadUniformVector4f(uniTexCoords, new Vector4f(texCoords.x, texCoords.y, textureWidth, textureHeight));
 	}
 
 	public void loadEntityMetaDataUniforms(EntitySprite e) {

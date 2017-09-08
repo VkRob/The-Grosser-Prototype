@@ -200,4 +200,8 @@ public class RenderGL {
 	public void loadMachineMetaDataUniforms() {
 		spriteShader.loadMachineMetaDataUniforms();
 	}
+
+	public void loadUniformsToMachineShader(Vector2f texCoords, Vector2f position, Vector2f cameraPosition) {
+		machineShader.loadUniformsToShader(texCoords, position, cameraPosition);
+	}
 }
